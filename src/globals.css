@@ -1,0 +1,279 @@
+/* Estilos globales */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-color: #C03A74;
+  --primary-light: #FADADD;
+  --primary-dark: #a82d63;
+  --secondary-color: #4285F4; /* Azul para complementar el rosa */
+  --dark-bg: #1f2937;
+  --light-bg: #f9fafb;
+  --text-dark: #111827;
+  --text-light: #f3f4f6;
+  --gray-light: #e5e7eb;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  @apply bg-gray-50;
+}
+
+.navbar{
+  color: var(--text-light);
+}
+
+/* Estilos para tarjetas de proyecto */
+.project-card {
+  @apply bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300;
+  border: 1px solid var(--gray-light);
+}
+
+.project-card:hover {
+  @apply shadow-xl transform -translate-y-1;
+}
+
+.project-card .project-header {
+  @apply h-40 flex items-center justify-center relative overflow-hidden;
+}
+
+.project-card .project-header.blue {
+  background: linear-gradient(135deg, #4285F4, #34a0ff);
+}
+
+.project-card .project-header.pink {
+  background: linear-gradient(135deg, #C03A74, #d54d8c);
+}
+
+.project-card .project-header.green {
+  background: linear-gradient(135deg, #0F9D58, #04b97f);
+}
+
+.project-card .project-header.purple {
+  background: linear-gradient(135deg, #9c27b0, #bb46d0);
+}
+
+.project-card .project-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+.project-card .project-content {
+  @apply p-6;
+}
+
+.project-card .project-title {
+  @apply text-xl font-bold mb-3 text-gray-800;
+}
+
+.project-card .project-description {
+  @apply text-gray-600 mb-4;
+}
+
+.project-card .project-link {
+  @apply text-sm font-medium flex items-center;
+  color: var(--primary-color);
+}
+
+.project-card .project-link:hover {
+  @apply underline;
+  color: var(--primary-dark);
+}
+
+.project-card .project-icon {
+  @apply text-white text-5xl z-10;
+}
+
+/* Estilos para botones */
+.btn {
+  @apply inline-block px-6 py-3 rounded-md font-medium transition-all duration-300;
+}
+
+.btn-primary {
+  @apply bg-[#C03A74] text-white;
+}
+
+.btn-primary:hover {
+  @apply bg-[#a82d63] transform -translate-y-1 shadow-lg;
+}
+
+.btn-outline {
+  @apply border-2 border-[#C03A74] text-[#C03A74];
+}
+
+.btn-outline:hover {
+  @apply bg-[#C03A74] text-white transform -translate-y-1 shadow-lg;
+}
+
+/* Estilos para secciones */
+.section-title {
+  @apply text-3xl font-bold mb-6 inline-block relative;
+}
+
+.section-title::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-1/2 h-1 bg-[#C03A74];
+}
+
+/* Estilos para tarjetas de habilidades */
+.skill-card {
+  @apply p-4 rounded-lg transition-all duration-300;
+  background-color: white;
+  border: 1px solid var(--gray-light);
+}
+
+.skill-card:hover {
+  @apply shadow-md bg-[#FADADD]/10;
+  border-color: var(--primary-color);
+}
+
+.skill-icon {
+  @apply text-[#C03A74] text-2xl;
+}
+
+/* Estilos para formulario de contacto */
+.form-input {
+  @apply w-full p-2 border border-gray-300 rounded-md focus:outline-none;
+}
+
+.form-input:focus {
+  @apply ring-2 ring-[#C03A74] border-[#C03A74];
+}
+
+/* Animaciones */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilos para la página de proyectos */
+.project-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
+}
+
+/* Estilo específico para la tarjeta de proyecto de la imagen */
+.project-card-module {
+  @apply bg-white rounded-xl shadow-md overflow-hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.project-card-module .project-header {
+  @apply bg-blue-500;
+  background: linear-gradient(135deg, #4285F4, #357ae8);
+}
+
+.project-card-module .project-title {
+  @apply text-xl font-bold mb-2 text-gray-800;
+}
+
+.project-card-module .project-description {
+  @apply text-gray-600 mb-4;
+}
+
+.project-card-module .project-link {
+  @apply text-blue-500 font-medium hover:underline flex items-center;
+}
+
+/* Estilos para el navbar */
+.navbar .nav-link {
+  @apply relative text-sm font-medium group transition-colors duration-300;
+}
+
+.navbar .nav-link.active {
+  color: var(--primary-color); /* Color rosa para el enlace activo */
+}
+
+.navbar .nav-link:hover:not(.active) {
+  color: var(--secondary-color); /* Color azul para el hover */
+}
+
+.navbar .nav-link::after {
+  content: '';
+  @apply absolute -bottom-1 left-0 h-0.5 transition-all duration-300 w-0;
+}
+
+.navbar .nav-link.active::after {
+  @apply w-full bg-[#C03A74]; /* Línea rosa para el activo */
+}
+
+.navbar .nav-link:hover::after:not(.active::after) {
+  @apply w-full bg-[#4285F4]; /* Línea azul para el hover */
+}
+
+/* Botón de contacto en el navbar */
+.navbar .contact-btn {
+  @apply px-4 py-2 rounded-md transition-all bg-[#C03A74] text-white;
+}
+
+.navbar .contact-btn:hover {
+  @apply bg-[#a82d63];
+}
+
+/* Menú móvil */
+.navbar .mobile-link {
+  @apply p-2 rounded-md transition-colors duration-300;
+}
+
+.navbar .mobile-link.active {
+  @apply bg-[#C03A74] text-white;
+}
+
+.navbar .mobile-link:not(.active) {
+  @apply text-white hover:bg-gray-800 hover:text-[#4285F4];
+}
+
+/* Estilos para el footer */
+footer {
+  @apply bg-gray-800 text-white py-8 px-4;
+}
+
+footer h3 {
+  color: white !important;
+}
+
+footer h4 {
+  color: white !important;
+}
+
+footer .footer-logo {
+  @apply text-3xl font-bold mb-4;
+}
+
+footer .footer-links {
+  @apply grid grid-cols-2 gap-8;
+}
+
+footer .footer-links div {
+  @apply flex flex-col;
+}
+
+footer .footer-links a {
+  @apply text-sm mb-2;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+footer .footer-links a:hover {
+  @apply text-white;
+}
+
+footer .social-icons {
+  @apply flex space-x-4 mt-4;
+}
+
+footer .social-icons a {
+  @apply text-xl;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+footer .social-icons a:hover {
+  @apply text-white;
+}
