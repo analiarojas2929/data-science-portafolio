@@ -45,7 +45,7 @@ jobs:
         with:
           args: deploy --only hosting
         env:
-          FIREBASE_TOKEN: \${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_TOKEN: \${{ secrets.FIREBASE_SERVICE_ACCOUNT_DATASCIENCE_PORTAFOLIO }}
           PROJECT_ID: datascience-portafolio
 
       - name: 🛠️ Configurar API para PythonAnywhere
