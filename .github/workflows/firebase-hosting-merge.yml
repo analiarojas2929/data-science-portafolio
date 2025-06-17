@@ -54,26 +54,26 @@ jobs:
           zip -r api.zip ./api
 
       - name: 🚀 Desplegar en PythonAnywhere
-        uses: padok-team/github-actions-pythonanywhere@v1.0.0
-        with:
-          host: www.pythonanywhere.com
-          user: analiarojasaraya
-          token: \${{ secrets.PYTHONANYWHERE_API_TOKEN }}
-          repository: api.zip
-          path: /home/analiarojasaraya/mysite/
-          command: |
+        env:
+          PA_USER: analiarojasaraya
+          PA_HOST: ssh.pythonanywhere.com
+          PA_PATH: /home/analiarojasaraya/mysite/
+          PA_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+          # Copiar el archivo comprimido al servidor
+          sshpass -p "$PA_TOKEN" scp -o StrictHostKeyChecking=no api.zip $PA_USER@$PA_HOST:$PA_PATH
+          # Ejecutar comandos remotos para desplegar
+          sshpass -p "$PA_TOKEN" ssh -o StrictHostKeyChecking=no $PA_USER@$PA_HOST << 'ENDSSH'
             cd /home/analiarojasaraya/mysite
             unzip -o api.zip
-            # Crear directorios necesarios
             mkdir -p /home/analiarojasaraya/mysite/static/plots
             mkdir -p /home/analiarojasaraya/mysite/datasets
-            # Instalar dependencias
             pip3 install --user -r api/requirements.txt
-            # Configurar kaggle
             mkdir -p ~/.kaggle
             echo '{"username":"analiarojas", "key":"0faf5a9174738f31c86ee611c82245e5"}' > ~/.kaggle/kaggle.json
             chmod 600 ~/.kaggle/kaggle.json
-            # Mover archivos al lugar correcto
             cp api/app.py /home/analiarojasaraya/mysite/
-            # Tocar el archivo WSGI para forzar recarga
             touch /var/www/analiarojasaraya_pythonanywhere_com_wsgi.py
+          ENDSSH
