@@ -17,10 +17,6 @@ ui-debug.log
 .firebaserc
 
 # Python API
-api/static/plots/
-api/datasets/
 api/__pycache__/
 *.pyc
 venv/
-.env
-.kaggle/

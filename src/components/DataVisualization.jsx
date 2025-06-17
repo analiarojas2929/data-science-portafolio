@@ -17,22 +17,24 @@ const mockDatasets = [
 ];
 
 const mockSampleCode = {
-  "iris": `# Análisis del dataset Iris de Kaggle
+  "iris": `# Analizar el dataset Iris
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 # El dataset ya está cargado en 'df'
 
-# Visualizar las primeras filas
+# Verificar los nombres de columnas
+print("Nombres de columnas:", df.columns.tolist())
+
+# Visualizar las primeras filas para entender la estructura
 print(df.head())
 
-# Estadísticas descriptivas
-print(df.describe())
-
-# Crear un gráfico de dispersión por especies
+# Ahora crear el gráfico usando los nombres correctos de columnas
 plt.figure(figsize=(10, 6))
-sns.scatterplot(data=df, x='sepal_length', y='sepal_width', hue='species')
+# Usaremos los nombres de columna tal como aparecen en el DataFrame
+# df.columns[0] para la primera columna, df.columns[1] para la segunda, etc.
+sns.scatterplot(data=df, x=df.columns[0], y=df.columns[1], hue=df.columns[-1])
 plt.title('Relación entre Longitud y Ancho del Sépalo por Especie')
 plt.grid(True, alpha=0.3)
 plt.tight_layout()`,
@@ -305,7 +307,7 @@ const DataVisualization = () => {
     
     if (backendAvailable) {
       try {
-        const response = await fetch(`${API_URL}/run-code`, {
+        const response = await fetch(`${API_URL}/code/run`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
