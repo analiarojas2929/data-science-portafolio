@@ -40,7 +40,7 @@ jobs:
             exit 1
           fi
 
-      - name: 🔥 Desplegar en Firebase
+    
       - name: 🔥 Desplegar en Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
