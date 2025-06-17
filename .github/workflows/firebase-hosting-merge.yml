@@ -35,7 +35,7 @@ jobs:
           echo "VITE_API_URL=https://data-science-portafolio.onrender.com/api" > .env.production
           
           echo "Archivos de entorno creados correctamente:"
-          cat.env.production
+          cat .env.production
 
       - name: 🛠️ Compilar la aplicación
         run: npm run build
