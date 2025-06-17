@@ -40,7 +40,6 @@ jobs:
             exit 1
           fi
 
-    
       - name: 🔥 Desplegar en Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -56,10 +55,13 @@ jobs:
 
       - name: 🚀 Desplegar en PythonAnywhere usando API HTTP
         run: |
-          # Subir archivo ZIP usando API HTTP (más confiable que SSH)
+          # Definimos el token directamente (NO RECOMENDADO EN PRODUCCIÓN)
+          PA_TOKEN="fe4fabbf1fc0fc323d611b633ef8b0e416338c5d"
+          
+          # Subir archivo ZIP usando API HTTP
           echo "Subiendo archivo ZIP a PythonAnywhere..."
           curl -X POST \
-            -H "Authorization: Token \${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
+            -H "Authorization: Token $PA_TOKEN" \
             -F "content=@api.zip" \
             https://www.pythonanywhere.com/api/v0/user/analiarojasaraya/files/path/home/analiarojasaraya/mysite/api.zip
           
@@ -81,19 +83,19 @@ jobs:
           
           # Subir script de despliegue
           curl -X POST \
-            -H "Authorization: Token \${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
+            -H "Authorization: Token $PA_TOKEN" \
             -F "content=@deploy.sh" \
             https://www.pythonanywhere.com/api/v0/user/analiarojasaraya/files/path/home/analiarojasaraya/deploy.sh
           
           # Hacer el script ejecutable y ejecutarlo a través de la API de consola
           curl -X POST \
-            -H "Authorization: Token \${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
+            -H "Authorization: Token $PA_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{"executable":"bash", "arguments":"chmod +x ~/deploy.sh && ~/deploy.sh"}' \
             https://www.pythonanywhere.com/api/v0/user/analiarojasaraya/consoles/
           
           # Recargar la aplicación web
           curl -X POST \
-            -H "Authorization: Token \${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
+            -H "Authorization: Token $PA_TOKEN" \
             https://www.pythonanywhere.com/api/v0/user/analiarojasaraya/webapps/analiarojasaraya.pythonanywhere.com/reload/
           echo "Despliegue en PythonAnywhere completado"
