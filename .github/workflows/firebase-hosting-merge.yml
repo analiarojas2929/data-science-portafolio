@@ -28,9 +28,14 @@ jobs:
         
       - name: 🔐 Configurar variables de entorno
         run: |
+          # Crear archivo .env para que Vite lo use durante el build
+          echo "VITE_API_URL=https://data-science-portafolio.onrender.com/api" > .env
+          
+          # También crear .env.production por compatibilidad
           echo "VITE_API_URL=https://data-science-portafolio.onrender.com/api" > .env.production
-          echo "Archivo .env.production creado con éxito:"
-          cat .env.production
+          
+          echo "Archivos de entorno creados correctamente:"
+          cat.env.production
 
       - name: 🛠️ Compilar la aplicación
         run: npm run build

@@ -29,7 +29,9 @@ print(f"Usando cuenta de Kaggle: {os.environ.get('KAGGLE_USERNAME')}")
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app)
-CORS(app)  # Habilitar CORS para todas las rutas
+CORS(app, origins=["https://datascience-portafolio.web.app", "http://localhost:3000"], 
+     supports_credentials=True, 
+     allow_headers=["Content-Type", "Authorization"])  # Habilitar CORS para todas las rutas
 
 # Configuración de Swagger
 api = Api(
