@@ -5,7 +5,7 @@ import CodeEditor from '@monaco-editor/react';
 import { loader } from '@monaco-editor/react';
 
 // Reemplaza todas las URL hardcodeadas con la variable de entorno
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // Datasets populares de Kaggle
 const mockDatasets = [
