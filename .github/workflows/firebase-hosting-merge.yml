@@ -48,4 +48,5 @@ jobs:
           projectId: datascience-portafolio
 
       - name: 🚀 Desplegar en Render
-        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+        run: |
+          curl -X POST "https://api.render.com/deploy/srv-d18bvf0gjchc73ep11r0?key=0V6lSURGZlM"
