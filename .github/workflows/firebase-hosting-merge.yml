@@ -41,39 +41,58 @@ jobs:
           fi
 
       - name: 🔥 Desplegar en Firebase
-        uses: FirebaseExtended/action-hosting-deploy@v0
+        uses: w9jds/firebase-action@master
         with:
-          repoToken: '\${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '\${{ secrets.FIREBASE_SERVICE_ACCOUNT_DATASCIENCE_PORTAFOLIO }}'
-          channelId: live
-          projectId: datascience-portafolio
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: \${{ secrets.FIREBASE_TOKEN }}
+          PROJECT_ID: datascience-portafolio
 
       - name: 🛠️ Configurar API para PythonAnywhere
         run: |
           # Comprimimos el directorio API
           zip -r api.zip ./api
 
-      - name: 🚀 Desplegar en PythonAnywhere
-        env:
-          PA_USER: analiarojasaraya
-          PA_HOST: ssh.pythonanywhere.com
-          PA_PATH: /home/analiarojasaraya/mysite/
-          PA_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
+      - name: 🚀 Desplegar en PythonAnywhere usando API HTTP
         run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass
-          # Copiar el archivo comprimido al servidor
-          sshpass -p "$PA_TOKEN" scp -o StrictHostKeyChecking=no api.zip $PA_USER@$PA_HOST:$PA_PATH
-          # Ejecutar comandos remotos para desplegar
-          sshpass -p "$PA_TOKEN" ssh -o StrictHostKeyChecking=no $PA_USER@$PA_HOST << 'ENDSSH'
-            cd /home/analiarojasaraya/mysite
-            unzip -o api.zip
-            mkdir -p /home/analiarojasaraya/mysite/static/plots
-            mkdir -p /home/analiarojasaraya/mysite/datasets
-            pip3 install --user -r api/requirements.txt
-            mkdir -p ~/.kaggle
-            echo '{"username":"analiarojas", "key":"0faf5a9174738f31c86ee611c82245e5"}' > ~/.kaggle/kaggle.json
-            chmod 600 ~/.kaggle/kaggle.json
-            cp api/app.py /home/analiarojasaraya/mysite/
-            touch /var/www/analiarojasaraya_pythonanywhere_com_wsgi.py
-          ENDSSH
+          # Subir archivo ZIP usando API HTTP (más confiable que SSH)
+          echo "Subiendo archivo ZIP a PythonAnywhere..."
+          curl -X POST \
+            -H "Authorization: Token \${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
+            -F "content=@api.zip" \
+            https://www.pythonanywhere.com/api/v0/user/analiarojasaraya/files/path/home/analiarojasaraya/mysite/api.zip
+          
+          # Crear script de despliegue
+          cat > deploy.sh << 'EOL'
+          #!/bin/bash
+          cd /home/analiarojasaraya/mysite
+          unzip -o api.zip
+          mkdir -p /home/analiarojasaraya/mysite/static/plots
+          mkdir -p /home/analiarojasaraya/mysite/datasets
+          pip3 install --user -r api/requirements.txt
+          mkdir -p ~/.kaggle
+          echo '{"username":"analiarojas", "key":"0faf5a9174738f31c86ee611c82245e5"}' > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
+          cp api/app.py /home/analiarojasaraya/mysite/
+          touch /var/www/analiarojasaraya_pythonanywhere_com_wsgi.py
+          echo "Despliegue completado"
+          EOL
+          
+          # Subir script de despliegue
+          curl -X POST \
+            -H "Authorization: Token \${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
+            -F "content=@deploy.sh" \
+            https://www.pythonanywhere.com/api/v0/user/analiarojasaraya/files/path/home/analiarojasaraya/deploy.sh
+          
+          # Hacer el script ejecutable y ejecutarlo a través de la API de consola
+          curl -X POST \
+            -H "Authorization: Token \${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"executable":"bash", "arguments":"chmod +x ~/deploy.sh && ~/deploy.sh"}' \
+            https://www.pythonanywhere.com/api/v0/user/analiarojasaraya/consoles/
+          
+          # Recargar la aplicación web
+          curl -X POST \
+            -H "Authorization: Token \${{ secrets.PYTHONANYWHERE_API_TOKEN }}" \
+            https://www.pythonanywhere.com/api/v0/user/analiarojasaraya/webapps/analiarojasaraya.pythonanywhere.com/reload/
+          echo "Despliegue en PythonAnywhere completado"
