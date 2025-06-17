@@ -1,4 +1,5 @@
-name: Deploy to Firebase Hosting & Render
+
+name: Deploy to Firebase Hosting & PythonAnywhere
 
 on:
   push:
@@ -25,7 +26,7 @@ jobs:
 
       - name: 🔐 Crear archivo .env.production
         run: |
-          echo "VITE_API_URL=https://data-science-portafolio.onrender.com/api" > .env.production
+          echo "VITE_API_URL=https://analiarojasaraya.pythonanywhere.com/api" > .env.production
 
       - name: 🛠️ Compilar aplicación
         run: npm run build
@@ -42,10 +43,37 @@ jobs:
       - name: 🔥 Desplegar en Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DATASCIENCE_PORTAFOLIO }}'
+          repoToken: '\${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '\${{ secrets.FIREBASE_SERVICE_ACCOUNT_DATASCIENCE_PORTAFOLIO }}'
           channelId: live
           projectId: datascience-portafolio
 
-      - name: 🚀 Desplegar en Render
-        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+      - name: 🛠️ Configurar API para PythonAnywhere
+        run: |
+          # Comprimimos el directorio API
+          zip -r api.zip ./api
+
+      - name: 🚀 Desplegar en PythonAnywhere
+        uses: padok-team/github-actions-pythonanywhere@v1.0.0
+        with:
+          host: www.pythonanywhere.com
+          user: analiarojasaraya
+          token: \${{ secrets.PYTHONANYWHERE_API_TOKEN }}
+          repository: api.zip
+          path: /home/analiarojasaraya/mysite/
+          command: |
+            cd /home/analiarojasaraya/mysite
+            unzip -o api.zip
+            # Crear directorios necesarios
+            mkdir -p /home/analiarojasaraya/mysite/static/plots
+            mkdir -p /home/analiarojasaraya/mysite/datasets
+            # Instalar dependencias
+            pip3 install --user -r api/requirements.txt
+            # Configurar kaggle
+            mkdir -p ~/.kaggle
+            echo '{"username":"analiarojas", "key":"0faf5a9174738f31c86ee611c82245e5"}' > ~/.kaggle/kaggle.json
+            chmod 600 ~/.kaggle/kaggle.json
+            # Mover archivos al lugar correcto
+            cp api/app.py /home/analiarojasaraya/mysite/
+            # Tocar el archivo WSGI para forzar recarga
+            touch /var/www/analiarojasaraya_pythonanywhere_com_wsgi.py

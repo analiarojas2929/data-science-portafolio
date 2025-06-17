@@ -79,13 +79,15 @@ sample_code_output = api.model('SampleCodeOutput', {
     'code': fields.String(description='Código de ejemplo para el dataset')
 })
 
-# Configura directorio de archivos temporales según el entorno
-if 'RENDER' in os.environ:
-    # En Render, usar directorio temporal
-    UPLOAD_FOLDER = '/tmp/plots'
+# Verificar si estamos en PythonAnywhere
+if 'PYTHONANYWHERE_DOMAIN' in os.environ:
+    # Configuraciones específicas para PythonAnywhere
+    UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', '/home/analiarojasaraya/mysite/static/plots')
+    DATASETS_FOLDER = os.path.join('/home/analiarojasaraya/mysite', 'datasets')
 else:
-    # Desarrollo local
+    # Configuración local o Render
     UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'plots')
+    DATASETS_FOLDER = 'datasets'
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -96,7 +98,6 @@ def serve_plot(filename):
     return send_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), mimetype='image/png')
 
 # Crear directorios necesarios
-DATASETS_FOLDER = 'datasets'
 os.makedirs(DATASETS_FOLDER, exist_ok=True)
 
 # Configurar credenciales de Kaggle en tiempo de ejecución
