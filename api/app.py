@@ -4,8 +4,6 @@ load_dotenv()  # Esto cargará las variables del archivo .env
 
 from flask import Flask, request, jsonify, send_file, redirect
 from flask_cors import CORS
-from flask_restx import Api, Resource, fields, Namespace
-from werkzeug.middleware.proxy_fix import ProxyFix
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -28,64 +26,17 @@ from kaggle.api.kaggle_api_extended import KaggleApi
 print(f"Usando cuenta de Kaggle: {os.environ.get('KAGGLE_USERNAME')}")
 
 app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app)
 CORS(app, origins=["*"], 
      supports_credentials=True, 
      allow_headers=["Content-Type", "Authorization"])  # Habilitar CORS para todas las rutas
 
-# Configuración de Swagger
-api = Api(
-    app, 
-    version='1.0',
-    title='API de Análisis de Datos',
-    description='API para ejecutar código Python y acceder a datasets de Kaggle',
-    doc='/swagger',
-    prefix='/api'
-)
-
-# Crear namespaces para organizar endpoints
-ns_datasets = api.namespace('datasets', description='Operaciones con datasets')
-ns_code = api.namespace('code', description='Ejecución de código Python')
-ns_status = api.namespace('status', description='Estado de la API')
-
-# Definir modelos para la documentación
-dataset_model = api.model('Dataset', {
-    'id': fields.String(required=True, description='ID del dataset'),
-    'name': fields.String(required=True, description='Nombre del dataset'),
-    'description': fields.String(required=True, description='Descripción del dataset'),
-    'source': fields.String(required=True, description='Fuente del dataset')
-})
-
-code_input = api.model('CodigoInput', {
-    'code': fields.String(required=True, description='Código Python a ejecutar'),
-    'dataset': fields.String(required=False, description='ID del dataset a utilizar')
-})
-
-code_output = api.model('CodigoOutput', {
-    'success': fields.Boolean(description='Indica si la ejecución fue exitosa'),
-    'image_url': fields.String(description='URL de la imagen generada (si existe)'),
-    'data': fields.Raw(description='Datos de salida (si existe)'),
-    'columns': fields.List(fields.String, description='Columnas del DataFrame (si existe)'),
-    'message': fields.String(description='Mensaje de salida'),
-    'error': fields.String(description='Mensaje de error (si existe)')
-})
-
-kaggle_status_model = api.model('KaggleStatus', {
-    'kaggle_api_available': fields.Boolean(description='Indica si la API de Kaggle está disponible'),
-    'datasets_available': fields.List(fields.String, description='Lista de datasets disponibles')
-})
-
-sample_code_output = api.model('SampleCodeOutput', {
-    'code': fields.String(description='Código de ejemplo para el dataset')
-})
-
 # Verificar si estamos en PythonAnywhere
 if 'PYTHONANYWHERE_DOMAIN' in os.environ:
     # Configuraciones específicas para PythonAnywhere
-    UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', '/home/analiarojasaraya/mysite/static/plots')
-    DATASETS_FOLDER = os.path.join('/home/analiarojasaraya/mysite', 'datasets')
+    UPLOAD_FOLDER = '/home/analiarojasaraya/mysite/static/plots'
+    DATASETS_FOLDER = '/home/analiarojasaraya/mysite/datasets'
 else:
-    # Configuración local o Render
+    # Configuración local
     UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'plots')
     DATASETS_FOLDER = 'datasets'
 
@@ -387,44 +338,34 @@ def execute_code(code, dataset_name=None):
             "error": str(e)
         }
 
-@ns_datasets.route('')
-class DatasetList(Resource):
-    @ns_datasets.doc('listar_datasets')
-    @ns_datasets.marshal_list_with(dataset_model)
-    def get(self):
-        """Obtener lista de datasets disponibles"""
-        datasets = [
-            {"id": "iris", "name": "Iris Dataset", "description": "Dataset clásico de flores iris", "source": "kaggle"},
-            {"id": "titanic", "name": "Titanic Dataset", "description": "Supervivencia de pasajeros del Titanic", "source": "kaggle"},
-            {"id": "housing", "name": "Housing Dataset", "description": "Precios de viviendas en California", "source": "kaggle"},
-            {"id": "wine", "name": "Wine Quality", "description": "Clasificación de calidad de vinos", "source": "kaggle"},
-            {"id": "covid", "name": "COVID-19 Global", "description": "Datos globales de COVID-19", "source": "kaggle"}
-        ]
-        return datasets
+# Endpoints sin Swagger
+@app.route('/api/datasets', methods=['GET'])
+def get_datasets():
+    """Obtener lista de datasets disponibles"""
+    datasets = [
+        {"id": "iris", "name": "Iris Dataset", "description": "Dataset clásico de flores iris", "source": "kaggle"},
+        {"id": "titanic", "name": "Titanic Dataset", "description": "Supervivencia de pasajeros del Titanic", "source": "kaggle"},
+        {"id": "housing", "name": "Housing Dataset", "description": "Precios de viviendas en California", "source": "kaggle"},
+        {"id": "wine", "name": "Wine Quality", "description": "Clasificación de calidad de vinos", "source": "kaggle"},
+        {"id": "covid", "name": "COVID-19 Global", "description": "Datos globales de COVID-19", "source": "kaggle"}
+    ]
+    return jsonify(datasets)
 
-@ns_code.route('/run')
-class RunCode(Resource):
-    @ns_code.doc('ejecutar_codigo')
-    @ns_code.expect(code_input)
-    @ns_code.marshal_with(code_output, skip_none=True)
-    def post(self):
-        """Ejecutar código Python y devolver resultados"""
-        data = request.json
-        code = data.get('code', '')
-        dataset = data.get('dataset', None)
-        result = execute_code(code, dataset)
-        return result
+@app.route('/api/code/run', methods=['POST'])
+def run_code():
+    """Ejecutar código Python y devolver resultados"""
+    data = request.json
+    code = data.get('code', '')
+    dataset = data.get('dataset', None)
+    result = execute_code(code, dataset)
+    return jsonify(result)
 
-@ns_code.route('/sample')
-class SampleCode(Resource):
-    @ns_code.doc('obtener_codigo_ejemplo')
-    @ns_code.param('dataset', 'ID del dataset para el que se desea obtener código de ejemplo')
-    @ns_code.marshal_with(sample_code_output)
-    def get(self):
-        """Obtener código de ejemplo para un dataset específico"""
-        dataset = request.args.get('dataset', 'iris')
-        samples = {
-            "iris": """# Análisis del dataset Iris de Kaggle
+@app.route('/api/code/sample', methods=['GET'])
+def get_sample_code():
+    """Obtener código de ejemplo para un dataset específico"""
+    dataset = request.args.get('dataset', 'iris')
+    samples = {
+        "iris": """# Análisis del dataset Iris de Kaggle
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -444,7 +385,7 @@ plt.title('Relación entre Longitud y Ancho del Sépalo por Especie')
 plt.grid(True, alpha=0.3)
 plt.tight_layout()""",
 
-            "titanic": """# Análisis de supervivencia en el Titanic (Kaggle)
+        "titanic": """# Análisis de supervivencia en el Titanic (Kaggle)
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -461,7 +402,7 @@ plt.legend(['No Sobrevivió', 'Sobrevivió'])
 plt.grid(True, alpha=0.3)
 plt.tight_layout()""",
 
-            "housing": """# Análisis del Housing Dataset de Kaggle
+        "housing": """# Análisis del Housing Dataset de Kaggle
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -482,7 +423,7 @@ plt.ylabel('Frecuencia')
 plt.grid(True, alpha=0.3)
 plt.tight_layout()""",
 
-            "wine": """# Análisis de calidad de vinos de Kaggle
+        "wine": """# Análisis de calidad de vinos de Kaggle
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -507,7 +448,7 @@ sns.heatmap(corr, mask=mask, annot=True, fmt='.2f', cmap='coolwarm', square=True
 plt.title('Matriz de Correlación entre Variables')
 plt.tight_layout()""",
 
-            "covid": """# Análisis de datos COVID-19 de Kaggle
+        "covid": """# Análisis de datos COVID-19 de Kaggle
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -534,30 +475,63 @@ plt.legend()
 plt.grid(True, alpha=0.3)
 plt.xticks(rotation=45)
 plt.tight_layout()"""
-        }
-        
-        return {"code": samples.get(dataset, samples["iris"])}
+    }
+    
+    return jsonify({"code": samples.get(dataset, samples["iris"])})
 
-@ns_status.route('/kaggle')
-class KaggleStatusResource(Resource):
-    @ns_status.doc('estado_kaggle')
-    @ns_status.marshal_with(kaggle_status_model)
-    def get(self):
-        """Obtener el estado de la conexión con Kaggle"""
-        return {
-            "kaggle_api_available": kaggle_available,
-            "datasets_available": list(KAGGLE_DATASETS.keys())
-        }
+@app.route('/api/status/kaggle', methods=['GET'])
+def get_kaggle_status():
+    """Obtener el estado de la conexión con Kaggle"""
+    return jsonify({
+        "kaggle_api_available": kaggle_available,
+        "datasets_available": list(KAGGLE_DATASETS.keys())
+    })
 
 # Ruta para probar que el servidor está funcionando
-@api.route('/hello')
-class HelloWorld(Resource):
-    def get(self):
-        """Test API status"""
-        return {
-            "status": "API funcionando correctamente",
-            "version": "1.0.0"
-        }
+@app.route('/api/hello')
+def hello_world():
+    """Test API status"""
+    return jsonify({
+        "status": "API funcionando correctamente",
+        "version": "1.0.0"
+    })
+
+# Documentación básica de la API
+@app.route('/api')
+def api_docs():
+    return jsonify({
+        "title": "API de Análisis de Datos",
+        "version": "1.0",
+        "endpoints": [
+            {
+                "path": "/api/hello",
+                "method": "GET",
+                "description": "Verifica si la API está funcionando"
+            },
+            {
+                "path": "/api/datasets",
+                "method": "GET",
+                "description": "Obtiene la lista de datasets disponibles"
+            },
+            {
+                "path": "/api/code/run",
+                "method": "POST",
+                "description": "Ejecuta código Python y devuelve resultados",
+                "body": {"code": "string", "dataset": "string (opcional)"}
+            },
+            {
+                "path": "/api/code/sample",
+                "method": "GET",
+                "description": "Obtiene código de ejemplo para un dataset",
+                "query": {"dataset": "string (opcional, default: iris)"}
+            },
+            {
+                "path": "/api/status/kaggle",
+                "method": "GET",
+                "description": "Verifica el estado de la conexión con Kaggle"
+            }
+        ]
+    })
 
 # Limpieza periódica de archivos antiguos
 @app.before_request
@@ -582,9 +556,13 @@ def enforce_https():
         return redirect(url, code=301)
 
 if __name__ == '__main__':
-    # Modo desarrollo local
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Verificar si estamos en PythonAnywhere
+    if 'PYTHONANYWHERE_DOMAIN' in os.environ:
+        print("Ejecutando en PythonAnywhere - el servidor WSGI gestionará la ejecución")
+    else:
+        # Modo desarrollo local
+        app.run(debug=True, host='0.0.0.0', port=5000)
 else:
     # Para producción
-    # No ejecutes el servidor aquí, Gunicorn se encargará de eso
+    # No ejecutes el servidor aquí, Gunicorn/uWSGI se encargará de eso
     pass
