@@ -79,14 +79,21 @@ sample_code_output = api.model('SampleCodeOutput', {
     'code': fields.String(description='Código de ejemplo para el dataset')
 })
 
-# Crear directorio para guardar gráficos si no existe
-UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'plots')
+# Configura directorio de archivos temporales según el entorno
+if 'RENDER' in os.environ:
+    # En Render, usar directorio temporal
+    UPLOAD_FOLDER = '/tmp/plots'
+else:
+    # Desarrollo local
+    UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'plots')
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Verificar y mostrar información sobre la carpeta
-print(f"Directorio para plots: {UPLOAD_FOLDER}")
-print(f"¿El directorio existe? {os.path.exists(UPLOAD_FOLDER)}")
+# También actualiza la ruta para servir los archivos estáticos
+@app.route('/static/plots/<filename>')
+def serve_plot(filename):
+    return send_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), mimetype='image/png')
 
 # Crear directorios necesarios
 DATASETS_FOLDER = 'datasets'
@@ -540,11 +547,6 @@ class KaggleStatusResource(Resource):
             "kaggle_api_available": kaggle_available,
             "datasets_available": list(KAGGLE_DATASETS.keys())
         }
-
-# Ruta para servir archivos estáticos
-@app.route('/static/plots/<filename>')
-def serve_plot(filename):
-    return send_file(f"static/plots/{filename}", mimetype='image/png')
 
 # Ruta para probar que el servidor está funcionando
 @api.route('/hello')
