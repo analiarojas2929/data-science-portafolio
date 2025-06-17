@@ -2,7 +2,7 @@
 from dotenv import load_dotenv
 load_dotenv()  # Esto cargará las variables del archivo .env
 
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, redirect
 from flask_cors import CORS
 from flask_restx import Api, Resource, fields, Namespace
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -29,7 +29,7 @@ print(f"Usando cuenta de Kaggle: {os.environ.get('KAGGLE_USERNAME')}")
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app)
-CORS(app, origins=["https://datascience-portafolio.web.app", "http://localhost:3000"], 
+CORS(app, origins=["*"], 
      supports_credentials=True, 
      allow_headers=["Content-Type", "Authorization"])  # Habilitar CORS para todas las rutas
 
@@ -572,5 +572,16 @@ def cleanup_old_plots():
         except Exception as e:
             print(f"Error durante limpieza: {e}")
 
+@app.before_request
+def enforce_https():
+    if request.headers.get('X-Forwarded-Proto') == 'http':
+        url = request.url.replace('http://', 'https://', 1)
+        return redirect(url, code=301)
+
 if __name__ == '__main__':
+    # Modo desarrollo local
     app.run(debug=True, host='0.0.0.0', port=5000)
+else:
+    # Para producción
+    # No ejecutes el servidor aquí, Gunicorn se encargará de eso
+    pass

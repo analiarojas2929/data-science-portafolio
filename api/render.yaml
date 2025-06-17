@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: data-science-portafolio
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: KAGGLE_USERNAME
+        value: analiarojas
+      - key: KAGGLE_KEY
+        value: 0faf5a9174738f31c86ee611c82245e5
+      - key: PYTHON_VERSION
+        value: 3.9.12
