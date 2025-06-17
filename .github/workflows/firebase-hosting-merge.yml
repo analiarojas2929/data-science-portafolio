@@ -1,16 +1,15 @@
-
-name: Deploy to Firebase Hosting
+name: Deploy to Firebase Hosting & Render
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:  # Permite ejecutar el workflow manualmente desde GitHub
+  workflow_dispatch:
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: 📥 Clonar el repositorio
         uses: actions/checkout@v4
@@ -18,36 +17,35 @@ jobs:
       - name: 🔧 Configurar Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Actualizado a Node.js 20 para compatibilidad con Firebase CLI
+          node-version: '20'
           cache: 'npm'
 
       - name: 📦 Instalar dependencias
         run: npm ci
-        
-      - name: 🔐 Configurar variables de entorno
-        run: |
-          # Crear archivos de entorno para la aplicación
-          echo "VITE_API_URL=https://data-science-portafolio.onrender.com/api" > .env.production
-          echo "API creada correctamente:"
-          cat .env.production
 
-      - name: 🛠️ Compilar la aplicación
-        run: npm run build
-        
-      - name: 📋 Verificar directorio de build
+      - name: 🔐 Crear archivo .env.production
         run: |
-          echo "Contenido del directorio build:"
-          ls -la build/
-          
-          if [ ! -d "build" ]; then
-            echo "⚠️ No se encontró el directorio build"
+          echo "VITE_API_URL=https://data-science-portafolio.onrender.com/api" > .env.production
+
+      - name: 🛠️ Compilar aplicación
+        run: npm run build
+
+      - name: 📂 Verificar carpeta de build
+        run: |
+          echo "Contenido de dist/:"
+          ls -la dist/
+          if [ ! -d "dist" ]; then
+            echo "⚠️ No se encontró el directorio dist"
             exit 1
           fi
 
-      - name: 📤 Desplegar en Firebase Hosting
+      - name: 🔥 Desplegar en Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DATASCIENCE_PORTAFOLIO }}'
           channelId: live
           projectId: datascience-portafolio
+
+      - name: 🚀 Desplegar en Render
+        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
