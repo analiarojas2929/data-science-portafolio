@@ -24,7 +24,8 @@ from kaggle.api.kaggle_api_extended import KaggleApi
 
 # Verificar que las variables están disponibles
 print(f"Usando cuenta de Kaggle: {os.environ.get('KAGGLE_USERNAME')}")
-
+print(f"KAGGLE_USERNAME: {os.environ.get('KAGGLE_USERNAME')}")
+print(f"KAGGLE_KEY: {os.environ.get('KAGGLE_KEY')}")
 app = Flask(__name__)
 CORS(app, origins=["*"], 
      supports_credentials=True, 
