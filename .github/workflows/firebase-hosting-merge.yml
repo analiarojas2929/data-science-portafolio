@@ -23,20 +23,22 @@ jobs:
       - name: 📦 Instalar dependencias
         run: |
           npm ci
-          npm install --save-dev vite @vitejs/plugin-react
+          npm install --no-save vite @vitejs/plugin-react
 
       - name: 🔐 Crear archivo .env.production
         run: |
-          echo "VITE_API_URL=https://analiarojasaraya.pythonanywhere.com/api" > .env.production
+          echo "VITE_API_URL=https://analiarojasaraya.pythonanywhere.com/api" >> .env.production
+          echo "VITE_API_BASE=https://analiarojasaraya.pythonanywhere.com" >> .env.production
 
       - name: 🛠️ Construir el proyecto
         run: |
-          npm ci
           npm run build
+          ls -la # Ver el contenido del directorio actual
+          ls -la dist || echo "No existe el directorio dist"
 
       - name: 📂 Verificar carpeta de build
         run: |
-          echo "Contenido de dist/:"  # Cambiado de build/ a dist/
+          echo "Contenido de /:"  # Cambiado de build/ a dist/
           ls -la dist/
           if [ ! -d "dist" ]; then    # Cambiado de build a dist
             echo "⚠️ No se encontró el directorio dist"
