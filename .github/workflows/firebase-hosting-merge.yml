@@ -23,7 +23,7 @@ jobs:
       - name: 📦 Instalar dependencias
         run: |
           npm ci
-          npm install --no-save vite @vitejs/plugin-react
+          npm install --save-dev vite @vitejs/plugin-react
 
       - name: 🔐 Crear archivo .env.production
         run: |
@@ -34,10 +34,10 @@ jobs:
 
       - name: 📂 Verificar carpeta de build
         run: |
-          echo "Contenido de build/:"
-          ls -la build/
-          if [ ! -d "build" ]; then
-            echo "⚠️ No se encontró el directorio build"
+          echo "Contenido de dist/:"  # Cambiado de build/ a dist/
+          ls -la dist/
+          if [ ! -d "dist" ]; then    # Cambiado de build a dist
+            echo "⚠️ No se encontró el directorio dist"
             exit 1
           fi
 
@@ -54,49 +54,3 @@ jobs:
           # Comprimimos el directorio API
           zip -r api.zip ./api
 
-      - name: 🚀 Desplegar en PythonAnywhere usando API HTTP
-        run: |
-          # Definimos el token directamente (NO RECOMENDADO EN PRODUCCIÓN)
-          PA_TOKEN="fe4fabbf1fc0fc323d611b633ef8b0e416338c5d"
-          
-          # Subir archivo ZIP usando API HTTP
-          echo "Subiendo archivo ZIP a PythonAnywhere..."
-          curl -X POST \
-            -H "Authorization: Token $PA_TOKEN" \
-            -F "content=@api.zip" \
-            https://www.pythonanywhere.com/api/v0/user/analiarojasaraya/files/path/home/analiarojasaraya/mysite/api.zip
-          
-          # Crear script de despliegue
-          cat > deploy.sh << 'EOL'
-          #!/bin/bash
-          cd /home/analiarojasaraya/mysite
-          unzip -o api.zip
-          mkdir -p /home/analiarojasaraya/mysite/static/plots
-          mkdir -p /home/analiarojasaraya/mysite/datasets
-          pip3 install --user -r api/requirements.txt
-          mkdir -p ~/.kaggle
-          echo '{"username":"analiarojas", "key":"0faf5a9174738f31c86ee611c82245e5"}' > ~/.kaggle/kaggle.json
-          chmod 600 ~/.kaggle/kaggle.json
-          cp api/app.py /home/analiarojasaraya/mysite/
-          touch /var/www/analiarojasaraya_pythonanywhere_com_wsgi.py
-          echo "Despliegue completado"
-          EOL
-          
-          # Subir script de despliegue
-          curl -X POST \
-            -H "Authorization: Token $PA_TOKEN" \
-            -F "content=@deploy.sh" \
-            https://www.pythonanywhere.com/api/v0/user/analiarojasaraya/files/path/home/analiarojasaraya/deploy.sh
-          
-          # Hacer el script ejecutable y ejecutarlo a través de la API de consola
-          curl -X POST \
-            -H "Authorization: Token $PA_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d '{"executable":"bash", "arguments":"chmod +x ~/deploy.sh && ~/deploy.sh"}' \
-            https://www.pythonanywhere.com/api/v0/user/analiarojasaraya/consoles/
-          
-          # Recargar la aplicación web
-          curl -X POST \
-            -H "Authorization: Token $PA_TOKEN" \
-            https://www.pythonanywhere.com/api/v0/user/analiarojasaraya/webapps/analiarojasaraya.pythonanywhere.com/reload/
-          echo "Despliegue en PythonAnywhere completado"
