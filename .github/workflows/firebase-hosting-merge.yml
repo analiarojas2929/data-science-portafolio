@@ -1,5 +1,4 @@
-﻿
-name: Deploy to Firebase Hosting & PythonAnywhere
+﻿name: Deploy to Firebase Hosting & PythonAnywhere
 
 on:
   push:
@@ -22,7 +21,9 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Instalar dependencias
-        run: npm ci
+        run: |
+          npm ci
+          npm install --no-save vite @vitejs/plugin-react
 
       - name: 🔐 Crear archivo .env.production
         run: |
