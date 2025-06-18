@@ -257,7 +257,7 @@ const DataVisualization = () => {
   const [backendAvailable, setBackendAvailable] = useState(false);
   const [viewMode, setViewMode] = useState('code'); // 'code', 'data', 'about'
   const [editorReady, setEditorReady] = useState(false);
-  
+
   // Comprobar si el backend está disponible e inicializar
   useEffect(() => {
     // Intentamos conectar con el backend
@@ -277,13 +277,13 @@ const DataVisualization = () => {
         setDatasets(mockDatasets);
         setCode(mockSampleCode.iris);
       });
-      
+
   }, []);
-  
+
   // Cargar código de ejemplo
   const loadSampleCode = (datasetId) => {
     setSelectedDataset(datasetId);
-    
+
     if (backendAvailable) {
       fetch(`${API_URL}/sample-code?dataset=${datasetId}`)
         .then(response => response.json())
@@ -298,13 +298,13 @@ const DataVisualization = () => {
       setCode(mockSampleCode[datasetId] || mockSampleCode.iris);
     }
   };
-  
+
   // Ejecutar código Python (o simular si no hay backend)
   const runCode = async () => {
     setLoading(true);
     setError(null);
     setResult(null);
-    
+
     if (backendAvailable) {
       try {
         const response = await fetch(`${API_URL}/code/run`, {
@@ -315,9 +315,9 @@ const DataVisualization = () => {
             dataset: selectedDataset
           }),
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
           setResult(data);
         } else {
@@ -350,20 +350,20 @@ const DataVisualization = () => {
         }
       }, 1500); // Simulamos un tiempo de carga de 1.5 segundos
     }
-    
+
     setTimeout(() => setLoading(false), 1500);
   };
-  
+
   // Simular descarga de la imagen
   const downloadImage = () => {
     if (result && result.image_url) {
       const link = document.createElement('a');
-      
+
       // Si es una URL local o una URL completa
-      const imageUrl = result.image_url.startsWith('http') 
-        ? result.image_url 
+      const imageUrl = result.image_url.startsWith('http')
+        ? result.image_url
         : `http://localhost:5000${result.image_url}`;
-        
+
       link.href = imageUrl;
       link.download = `visualization-${Date.now()}.png`;
       link.target = "_blank";
@@ -383,7 +383,7 @@ const DataVisualization = () => {
             <FaKaggle className="text-[#20BEFF] text-xl mr-3" />
             <h3 className="text-xl font-bold text-gray-800">{details.title}</h3>
           </div>
-          
+
           <div className="mb-6">
             <p className="text-gray-700 mb-4">{details.description}</p>
             <div className="flex items-center text-sm text-blue-600 hover:text-blue-800">
@@ -395,7 +395,7 @@ const DataVisualization = () => {
               </a>
             </div>
           </div>
-          
+
           <div className="mb-4">
             <h4 className="text-md font-semibold text-gray-800 mb-2">Variables del Dataset:</h4>
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
@@ -419,7 +419,7 @@ const DataVisualization = () => {
               </table>
             </div>
           </div>
-          
+
           <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
             <h4 className="text-sm font-semibold mb-2 flex items-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -428,8 +428,8 @@ const DataVisualization = () => {
               Sugerencia para Análisis
             </h4>
             <p className="text-sm text-gray-600">
-              Prueba a realizar análisis de correlación entre las variables para descubrir patrones interesantes. 
-              Para el dataset {details.title}, es especialmente útil explorar la relación entre 
+              Prueba a realizar análisis de correlación entre las variables para descubrir patrones interesantes.
+              Para el dataset {details.title}, es especialmente útil explorar la relación entre
               {selectedDataset === 'iris' && " las medidas de pétalos y sépalos para diferenciar especies."}
               {selectedDataset === 'titanic' && " la clase de pasajero, el género y las tasas de supervivencia."}
               {selectedDataset === 'housing' && " la tasa de criminalidad y el valor de las viviendas."}
@@ -442,7 +442,7 @@ const DataVisualization = () => {
     } else if (viewMode === 'data' && selectedDataset) {
       const data = mockDataFrames[selectedDataset];
       const columns = data ? Object.keys(data[0]) : [];
-      
+
       return (
         <div className="p-4">
           <h3 className="text-lg font-semibold mb-4">Muestra de Datos: {selectedDataset}</h3>
@@ -505,9 +505,13 @@ const DataVisualization = () => {
             <div className="flex flex-col h-full">
               {result.image_url ? (
                 <div className="bg-white p-4 rounded-lg shadow-sm flex-1 flex flex-col items-center justify-center">
-                  <img 
-                    src={result.image_url.startsWith('http') ? result.image_url : `http://localhost:5000${result.image_url}`} 
-                    alt="Visualización de datos" 
+                  <img
+                    src={
+                      result.image_url.startsWith('http')
+                        ? result.image_url
+                        : `${import.meta.env.VITE_API_BASE}${result.image_url}`
+                    }
+                    alt="Visualización de datos"
                     className="max-w-full max-h-[500px] object-contain rounded border border-gray-200"
                   />
                   <p className="text-gray-500 mt-2 text-sm">{result.message}</p>
@@ -563,19 +567,19 @@ const DataVisualization = () => {
   // Manejar cuando el editor está listo
   const handleEditorDidMount = (editor, monaco) => {
     setEditorReady(true);
-    
+
     // Configuración adicional del editor cuando está montado
     editor.updateOptions({
       tabSize: 4,
       insertSpaces: true
     });
-    
+
     // Opcional: puedes establecer el foco en el editor
     editor.focus();
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="bg-white rounded-xl shadow-lg overflow-hidden my-12"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -597,7 +601,7 @@ const DataVisualization = () => {
           </div>
         </div>
       )}
-      
+
       <div className="bg-gray-900 py-4 px-6 flex justify-between items-center">
         <h2 className="text-white text-xl font-bold flex items-center">
           <FaCode className="mr-2" /> Analizador de Datos Interactivo
@@ -605,7 +609,7 @@ const DataVisualization = () => {
         <div className="flex items-center space-x-4">
           <div className="flex items-center">
             <span className="text-gray-300 text-sm mr-2">Dataset:</span>
-            <select 
+            <select
               className="bg-gray-800 text-white rounded-md px-3 py-1 text-sm border border-gray-700"
               value={selectedDataset}
               onChange={(e) => loadSampleCode(e.target.value)}
@@ -617,12 +621,12 @@ const DataVisualization = () => {
               ))}
             </select>
           </div>
-          <button 
-            className="bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center transition-all" 
+          <button
+            className="bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center transition-all"
             onClick={runCode}
             disabled={loading}
           >
-            {loading ? 
+            {loading ?
               <span className="flex items-center">
                 <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -630,7 +634,7 @@ const DataVisualization = () => {
                 </svg>
                 Ejecutando...
               </span>
-              : 
+              :
               <>
                 <FaPlayCircle className="mr-2" /> Ejecutar Código
               </>
@@ -638,13 +642,13 @@ const DataVisualization = () => {
           </button>
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 h-[700px]">
         <div className="h-full border-r border-gray-200 flex flex-col">
           {/* Encabezado mejorado del editor */}
           <div className="bg-gray-800 py-3 px-4 font-medium text-sm flex items-center justify-between border-b border-gray-700 flex-shrink-0">
             <div className="flex items-center">
-              <FaCode className="mr-2 text-blue-400" /> 
+              <FaCode className="mr-2 text-blue-400" />
               <span className="text-white font-semibold">Editor de Código Python</span>
             </div>
             <div className="flex items-center space-x-2">
@@ -669,26 +673,26 @@ const DataVisualization = () => {
                 fontLigatures: true,
                 lineHeight: 22,
                 letterSpacing: 0.5,
-                
+
                 // Mejor contraste y resaltado:
                 theme: "vs-dark",
                 semanticHighlighting: true,
                 renderLineHighlight: "all",
-                
+
                 // Mejorar scroll y usabilidad:
                 mouseWheelZoom: true,
                 smoothScrolling: true,
                 cursorBlinking: "smooth",
                 cursorSmoothCaretAnimation: true,
-                
+
                 // Ayudas visuales:
-                minimap: { 
+                minimap: {
                   enabled: true,
                   scale: 1,
                   showSlider: "always",
                   size: "fill"
                 },
-                
+
                 // Comportamiento del editor:
                 wordWrap: "on",
                 wordWrapColumn: 80,
@@ -703,24 +707,24 @@ const DataVisualization = () => {
             />
           </div>
         </div>
-        
+
         <div className="h-full flex flex-col">
           {/* Encabezado mejorado de resultados */}
           <div className="bg-gray-800 py-3 px-4 font-medium text-sm flex items-center justify-between border-b border-gray-700">
             <div className="flex items-center">
-              <FaDatabase className="mr-2 text-green-400" /> 
+              <FaDatabase className="mr-2 text-green-400" />
               <span className="text-white font-semibold">Resultados</span>
             </div>
             {result && result.image_url && (
-              <button 
-                onClick={downloadImage} 
+              <button
+                onClick={downloadImage}
                 className="text-blue-300 hover:text-blue-100 flex items-center text-sm bg-gray-700 px-3 py-1 rounded-md transition-colors"
               >
                 <FaDownload className="mr-1" /> Descargar
               </button>
             )}
           </div>
-          
+
           {renderContent()}
         </div>
       </div>
