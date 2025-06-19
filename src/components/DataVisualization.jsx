@@ -248,6 +248,13 @@ const mockDataFrames = {
 };
 
 const DataVisualization = () => {
+  // Añade este estado para controlar qué filas están expandidas
+  const [expandedRows, setExpandedRows] = useState([]);
+  // Añade este estado para controlar las pestañas en móvil
+  const [mobileTab, setMobileTab] = useState('editor'); // 'editor' o 'result'
+  const editorRef = useRef(null);
+  
+  // Resto de tus estados existentes
   const [code, setCode] = useState('');
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -373,69 +380,119 @@ const DataVisualization = () => {
     }
   };
 
-  // Renderizar las pestañas del panel derecho
+  // Función para alternar la expansión de una fila
+  const toggleRowExpansion = (rowIndex) => {
+    setExpandedRows(prev => 
+      prev.includes(rowIndex) 
+        ? prev.filter(i => i !== rowIndex) 
+        : [...prev, rowIndex]
+    );
+  };
+
+  // Modificación completa del renderContent con scroll en todas las secciones
   const renderContent = () => {
     if (viewMode === 'about' && selectedDataset) {
       const details = datasetDetails[selectedDataset];
       return (
-        <div className="p-6">
-          <div className="flex items-center mb-4">
-            <FaKaggle className="text-[#20BEFF] text-xl mr-3" />
-            <h3 className="text-xl font-bold text-gray-800">{details.title}</h3>
-          </div>
-
-          <div className="mb-6">
-            <p className="text-gray-700 mb-4">{details.description}</p>
-            <div className="flex items-center text-sm text-blue-600 hover:text-blue-800">
-              <a href={details.url} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                Ver en Kaggle
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
+        <div className="h-full max-h-[400px] overflow-y-auto scrollbar pb-6"> {/* Añadida max-h-[400px] para limitar la altura */}
+          <div className="p-4 md:p-6"> {/* Mantiene el padding interno */}
+            <div className="flex items-center mb-4">
+              <FaKaggle className="text-[#20BEFF] text-lg md:text-xl mr-2 md:mr-3" />
+              <h3 className="text-lg md:text-xl font-bold text-gray-800">{details.title}</h3>
             </div>
-          </div>
 
-          <div className="mb-4">
-            <h4 className="text-md font-semibold text-gray-800 mb-2">Variables del Dataset:</h4>
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {details.variables.map((variable, index) => (
-                    <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{variable.name}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{variable.type}</td>
-                      <td className="px-6 py-4 text-sm text-gray-500">{variable.description}</td>
+            <div className="mb-4 md:mb-6">
+              <p className="text-sm md:text-base text-gray-700 mb-3">{details.description}</p>
+              <div className="flex items-center text-sm text-blue-600 hover:text-blue-800">
+                <a href={details.url} target="_blank" rel="noopener noreferrer" className="flex items-center bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full transition-colors">
+                  Ver en Kaggle
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <h4 className="text-md font-semibold text-gray-800 mb-2">Variables del Dataset:</h4>
+              
+              {/* Tabla para desktop - mejorada la altura máxima y barra de desplazamiento */}
+              <div className="hidden md:block bg-white rounded-lg border border-gray-200 overflow-auto max-h-[350px] scrollbar">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50 sticky top-0 z-10">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {details.variables.map((variable, index) => (
+                      <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{variable.name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{variable.type}</td>
+                        <td className="px-6 py-4 text-sm text-gray-500">{variable.description}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              
+              {/* Acordeón para mobile */}
+              <div className="md:hidden space-y-2">
+                {details.variables.map((variable, index) => (
+                  <div key={index} className="border rounded-lg overflow-hidden bg-white">
+                    <button 
+                      className="w-full text-left p-3 flex justify-between items-center bg-gray-50 border-b border-gray-200"
+                      onClick={() => toggleRowExpansion(index + 200)}
+                    >
+                      <span className="font-medium text-gray-700">
+                        {variable.name}
+                      </span>
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className={`h-5 w-5 transition-transform ${expandedRows.includes(index + 200) ? 'rotate-180' : ''}`} 
+                        viewBox="0 0 20 20" 
+                        fill="currentColor"
+                      >
+                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    </button>
+                    
+                    {expandedRows.includes(index + 200) && (
+                      <div className="p-3 space-y-2">
+                        <div className="py-1">
+                          <div className="text-xs font-medium text-gray-500 uppercase mb-1">Tipo</div>
+                          <div className="text-sm text-gray-900">{variable.type}</div>
+                        </div>
+                        <div className="py-1">
+                          <div className="text-xs font-medium text-gray-500 uppercase mb-1">Descripción</div>
+                          <div className="text-sm text-gray-900">{variable.description}</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <h4 className="text-sm font-semibold mb-2 flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Sugerencia para Análisis
-            </h4>
-            <p className="text-sm text-gray-600">
-              Prueba a realizar análisis de correlación entre las variables para descubrir patrones interesantes.
-              Para el dataset {details.title}, es especialmente útil explorar la relación entre
-              {selectedDataset === 'iris' && " las medidas de pétalos y sépalos para diferenciar especies."}
-              {selectedDataset === 'titanic' && " la clase de pasajero, el género y las tasas de supervivencia."}
-              {selectedDataset === 'housing' && " la tasa de criminalidad y el valor de las viviendas."}
-              {selectedDataset === 'wine' && " la acidez y la calidad del vino."}
-              {selectedDataset === 'covid' && " la propagación del virus en diferentes países a lo largo del tiempo."}
-            </p>
+            <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <h4 className="text-sm font-semibold mb-2 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Sugerencia para Análisis
+              </h4>
+              <p className="text-sm text-gray-600">
+                Prueba a realizar análisis de correlación entre las variables para descubrir patrones interesantes.
+                Para el dataset {details.title}, es especialmente útil explorar la relación entre
+                {selectedDataset === 'iris' && " las medidas de pétalos y sépalos para diferenciar especies."}
+                {selectedDataset === 'titanic' && " la clase de pasajero, el género y las tasas de supervivencia."}
+                {selectedDataset === 'housing' && " la tasa de criminalidad y el valor de las viviendas."}
+                {selectedDataset === 'wine' && " la acidez y la calidad del vino."}
+                {selectedDataset === 'covid' && " la propagación del virus en diferentes países a lo largo del tiempo."}
+              </p>
+            </div>
           </div>
         </div>
       );
@@ -444,121 +501,201 @@ const DataVisualization = () => {
       const columns = data ? Object.keys(data[0]) : [];
 
       return (
-        <div className="p-4">
-          <h3 className="text-lg font-semibold mb-4">Muestra de Datos: {selectedDataset}</h3>
-          <div className="bg-white rounded-lg border border-gray-200 overflow-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  {columns.map((col, i) => (
-                    <th key={i} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      {col}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {data.map((row, i) => (
-                  <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    {columns.map((col, j) => (
-                      <td key={j} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {row[col] !== null ? row[col].toString() : 'null'}
-                      </td>
+        <div className="h-full overflow-y-auto scrollbar pb-6"> {/* Añadido h-full, scrollbar y pb-6 */}
+          <div className="p-4"> {/* Contenedor interno con padding */}
+            <h3 className="text-lg font-semibold mb-4">Muestra de Datos: {selectedDataset}</h3>
+            
+            {/* Tabla responsiva para desktop */}
+            <div className="hidden md:block bg-white rounded-lg border border-gray-200 overflow-auto max-h-[500px] scrollbar"> {/* Ajustada altura máxima */}
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50 sticky top-0 z-10"> {/* Añadido sticky */}
+                  <tr>
+                    {columns.map((col, i) => (
+                      <th key={i} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        {col}
+                      </th>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="mt-4 text-sm text-gray-500">
-            <p className="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Mostrando las primeras 5 filas del dataset. El conjunto de datos completo contiene más registros.
-            </p>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {data.map((row, i) => (
+                    <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                      {columns.map((col, j) => (
+                        <td key={j} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {row[col] !== null ? row[col].toString() : 'null'}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Acordeón para mobile */}
+            <div className="md:hidden space-y-3">
+              {data.map((row, i) => (
+                <div key={i} className="border rounded-lg overflow-hidden bg-white">
+                  <button 
+                    className="w-full text-left p-3 flex justify-between items-center bg-gray-50 border-b border-gray-200"
+                    onClick={() => toggleRowExpansion(i)}
+                  >
+                    <span className="font-medium text-gray-700">
+                      Registro #{i+1}: {columns[0]} = {row[columns[0]]}
+                    </span>
+                    <svg 
+                      xmlns="http://www.w3.org/2000/svg" 
+                      className={`h-5 w-5 transition-transform ${expandedRows.includes(i) ? 'rotate-180' : ''}`} 
+                      viewBox="0 0 20 20" 
+                      fill="currentColor"
+                    >
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                  
+                  {expandedRows.includes(i) && (
+                    <div className="p-3 divide-y divide-gray-200">
+                      {columns.map((col, j) => (
+                        <div key={j} className="py-2">
+                          <div className="text-xs font-medium text-gray-500 uppercase mb-1">{col}</div>
+                          <div className="text-sm text-gray-900">{row[col] !== null ? row[col].toString() : 'null'}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            {/* Información adicional */}
+            <div className="mt-4 text-sm text-gray-500">
+              <p className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Mostrando las primeras 5 filas del dataset. El conjunto de datos completo contiene más registros.
+              </p>
+            </div>
           </div>
         </div>
       );
     } else {
-      // Default: viewMode === 'code'
+      // Vista de resultados con scroll adecuado
       return (
-        <div className="flex-1 overflow-auto p-4 bg-gray-50">
-          {loading ? (
-            <div className="h-full flex items-center justify-center">
-              <div className="text-center">
-                <svg className="animate-spin h-10 w-10 text-black mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <p className="text-gray-600">Procesando código Python...</p>
-              </div>
-            </div>
-          ) : error ? (
-            <div className="bg-red-50 border border-red-200 rounded-md p-4">
-              <h3 className="text-red-800 font-medium mb-2">Error:</h3>
-              <pre className="text-red-700 bg-red-50 p-3 rounded overflow-auto text-sm whitespace-pre-wrap">
-                {error}
-              </pre>
-            </div>
-          ) : result ? (
-            <div className="flex flex-col h-full">
-              {result.image_url ? (
-                <div className="bg-white p-4 rounded-lg shadow-sm flex-1 flex flex-col items-center justify-center">
-                  <img
-                    src={
-                      result.image_url.startsWith('http')
-                        ? result.image_url
-                        : `${import.meta.env.VITE_API_BASE}${result.image_url}`
-                    }
-                    alt="Visualización de datos"
-                    className="max-w-full max-h-[500px] object-contain rounded border border-gray-200"
-                  />
-                  <p className="text-gray-500 mt-2 text-sm">{result.message}</p>
+        <div className="h-full overflow-y-auto scrollbar pb-6"> {/* Mejoramos el scroll */}
+          <div className="p-4 bg-gray-50 h-full overflow-y-auto"> {/* Añadido h-full y overflow-y-auto */}
+            {loading ? (
+              <div className="h-full flex items-center justify-center">
+                <div className="text-center">
+                  <svg className="animate-spin h-10 w-10 text-black mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <p className="text-gray-600">Procesando código Python...</p>
                 </div>
-              ) : result.data ? (
-                <div className="overflow-auto">
-                  <h3 className="text-lg font-medium mb-2">Resultados del DataFrame:</h3>
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-100">
-                        <tr>
-                          {result.columns.map((col, i) => (
-                            <th key={i} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                              {col}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-gray-200">
-                        {result.data.map((row, i) => (
-                          <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                            {result.columns.map((col, j) => (
-                              <td key={j} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {row[col] !== null ? row[col].toString() : 'null'}
-                              </td>
+              </div>
+            ) : error ? (
+              <div className="bg-red-50 border border-red-200 rounded-md p-4 overflow-y-auto max-h-full"> {/* Añadido overflow-y-auto y max-h-full */}
+                <h3 className="text-red-800 font-medium mb-2">Error:</h3>
+                <pre className="text-red-700 bg-red-50 p-3 rounded overflow-auto scrollbar text-sm whitespace-pre-wrap">
+                  {error}
+                </pre>
+              </div>
+            ) : result ? (
+              <div className="flex flex-col overflow-y-auto max-h-full scrollbar"> {/* Añadido overflow-y-auto y max-h-full */}
+                {result.image_url ? (
+                  <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-center justify-center">
+                    <img
+                      src={
+                        result.image_url.startsWith('http')
+                          ? result.image_url
+                          : `${import.meta.env.VITE_API_BASE}${result.image_url}`
+                      }
+                      alt="Visualización de datos"
+                      className="max-w-full max-h-[500px] object-contain rounded border border-gray-200"
+                    />
+                    <p className="text-gray-500 mt-2 text-sm">{result.message}</p>
+                  </div>
+                ) : result.data ? (
+                  <div className="overflow-y-auto max-h-full"> {/* Ajustado para scroll propio */}
+                    <h3 className="text-lg font-medium mb-2">Resultados del DataFrame:</h3>
+                    
+                    {/* Tabla responsiva para desktop */}
+                    <div className="hidden md:block overflow-auto max-h-[500px] scrollbar"> {/* Ya tiene buen scroll */}
+                      <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-100 sticky top-0 z-10"> {/* Añadido sticky */}
+                          <tr>
+                            {result.columns.map((col, i) => (
+                              <th key={i} className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                {col}
+                              </th>
                             ))}
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {result.data.map((row, i) => (
+                            <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                              {result.columns.map((col, j) => (
+                                <td key={j} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                  {row[col] !== null ? row[col].toString() : 'null'}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    
+                    {/* Acordeón para mobile */}
+                    <div className="md:hidden space-y-3">
+                      {result.data.map((row, i) => (
+                        <div key={i} className="border rounded-lg overflow-hidden bg-white">
+                          <button 
+                            className="w-full text-left p-3 flex justify-between items-center bg-gray-50 border-b border-gray-200"
+                            onClick={() => toggleRowExpansion(i + 100)} // Offset para no colisionar con otras tablas
+                          >
+                            <span className="font-medium text-gray-700">
+                              Fila #{i+1}
+                            </span>
+                            <svg 
+                              xmlns="http://www.w3.org/2000/svg" 
+                              className={`h-5 w-5 transition-transform ${expandedRows.includes(i + 100) ? 'rotate-180' : ''}`} 
+                              viewBox="0 0 20 20" 
+                              fill="currentColor"
+                            >
+                              <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                            </svg>
+                          </button>
+                          
+                          {expandedRows.includes(i + 100) && (
+                            <div className="p-3 divide-y divide-gray-200">
+                              {result.columns.map((col, j) => (
+                                <div key={j} className="py-2">
+                                  <div className="text-xs font-medium text-gray-500 uppercase mb-1">{col}</div>
+                                  <div className="text-sm text-gray-900">{row[col] !== null ? row[col].toString() : 'null'}</div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className="text-center p-8">
-                  <p className="text-gray-500">{result.message}</p>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="h-full flex flex-col items-center justify-center text-center text-gray-500">
-              <FaPlayCircle className="text-4xl mb-4 text-gray-400" />
-              <h3 className="text-lg font-medium mb-1">Ejecuta el código para ver resultados</h3>
-              <p className="max-w-md">
-                Escribe o modifica el código Python en el editor y presiona 'Ejecutar Código' para visualizar los resultados.
-              </p>
-            </div>
-          )}
+                ) : (
+                  <div className="text-center p-8">
+                    <p className="text-gray-500">{result.message}</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center text-gray-500">
+                <FaPlayCircle className="text-4xl mb-4 text-gray-400" />
+                <h3 className="text-lg font-medium mb-1">Ejecuta el código para ver resultados</h3>
+                <p className="max-w-md">
+                  Escribe o modifica el código Python en el editor y presiona 'Ejecutar Código' para visualizar los resultados.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       );
     }
@@ -566,12 +703,16 @@ const DataVisualization = () => {
 
   // Manejar cuando el editor está listo
   const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
     setEditorReady(true);
 
     // Configuración adicional del editor cuando está montado
     editor.updateOptions({
       tabSize: 4,
-      insertSpaces: true
+      insertSpaces: true,
+      fontSize: 16, // Tamaño de fuente más grande para mejor legibilidad
+      lineHeight: 24, // Mayor espacio entre líneas para selección en móvil
+      wordWrap: "on" // Ajuste de línea para evitar scroll horizontal
     });
 
     // Opcional: puedes establecer el foco en el editor
@@ -580,13 +721,14 @@ const DataVisualization = () => {
 
   return (
     <motion.div
-      className="bg-white rounded-xl shadow-lg overflow-hidden my-12"
+      className="bg-white rounded-xl shadow-lg overflow-hidden my-6 md:my-12"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
+      {/* Alerta de modo demostración */}
       {!backendAvailable && (
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-yellow-700 text-sm">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-3 md:p-4 text-yellow-700 text-xs md:text-sm">
           <div className="flex">
             <div className="flex-shrink-0">
               <FaExclamationTriangle className="h-5 w-5 text-yellow-400" />
@@ -602,15 +744,16 @@ const DataVisualization = () => {
         </div>
       )}
 
-      <div className="bg-gray-900 py-4 px-6 flex justify-between items-center">
-        <h2 className="text-white text-xl font-bold flex items-center">
+      {/* Cabecera principal */}
+      <div className="bg-gray-900 py-3 md:py-4 px-4 md:px-6 flex justify-between items-center">
+        <h2 className="text-white text-lg md:text-xl font-bold flex items-center">
           <FaCode className="mr-2" /> Analizador de Datos Interactivo
         </h2>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 md:space-x-4">
           <div className="flex items-center">
-            <span className="text-gray-300 text-sm mr-2">Dataset:</span>
+            <span className="text-gray-300 text-xs md:text-sm mr-1 md:mr-2">Dataset:</span>
             <select
-              className="bg-gray-800 text-white rounded-md px-3 py-1 text-sm border border-gray-700"
+              className="bg-gray-800 text-white rounded-md px-2 md:px-3 py-1 text-xs md:text-sm border border-gray-700"
               value={selectedDataset}
               onChange={(e) => loadSampleCode(e.target.value)}
             >
@@ -622,44 +765,69 @@ const DataVisualization = () => {
             </select>
           </div>
           <button
-            className="bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center transition-all"
+            className="bg-black hover:bg-gray-800 text-white px-3 md:px-4 py-1 md:py-2 rounded-md text-xs md:text-sm font-medium flex items-center transition-all"
             onClick={runCode}
             disabled={loading}
           >
-            {loading ?
+            {loading ? (
               <span className="flex items-center">
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin -ml-1 mr-1 h-3 w-3 md:h-4 md:w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
                 Ejecutando...
               </span>
-              :
+            ) : (
               <>
-                <FaPlayCircle className="mr-2" /> Ejecutar Código
+                <FaPlayCircle className="mr-1 md:mr-2" /> Ejecutar Código
               </>
-            }
+            )}
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 h-[700px]">
-        <div className="h-full border-r border-gray-200 flex flex-col">
-          {/* Encabezado mejorado del editor */}
-          <div className="bg-gray-800 py-3 px-4 font-medium text-sm flex items-center justify-between border-b border-gray-700 flex-shrink-0">
+      {/* Pestañas para móvil - esto es lo principal */}
+      <div className="lg:hidden flex border-b border-gray-200">
+        <button 
+          className={`flex-1 py-2 px-4 text-sm font-medium ${mobileTab === 'editor' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+          onClick={() => setMobileTab('editor')}
+        >
+          <span className="flex items-center justify-center">
+            <FaCode className="mr-2" /> Editor de Código Python
+          </span>
+        </button>
+        <button 
+          className={`flex-1 py-2 px-4 text-sm font-medium ${mobileTab === 'result' ? 'bg-gray-800 text-white' : 'bg-gray-100 text-gray-700'}`}
+          onClick={() => setMobileTab('result')}
+        >
+          <span className="flex items-center justify-center">
+            <FaDatabase className="mr-2" /> Resultados
+          </span>
+        </button>
+      </div>
+
+      {/* Grid principal con contenido condicional para móvil */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+        {/* Editor de código - visible según pestaña en móvil */}
+        <div className={`h-[calc(100vh-200px)] border-r border-gray-200 flex flex-col ${mobileTab === 'editor' ? 'block' : 'hidden'} lg:block`}>
+          {/* Encabezado del editor con puntos de colores - ALTURA AUMENTADA */}
+          <div className="bg-gray-900 py-3 md:py-5 px-4 md:px-6 font-medium text-sm md:text-base flex items-center justify-between border-b border-gray-700 flex-shrink-0">
             <div className="flex items-center">
               <FaCode className="mr-2 text-blue-400" />
               <span className="text-white font-semibold">Editor de Código Python</span>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+            <div className="flex items-center space-x-3">
+              <div className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-red-500"></div>
+              <div className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-yellow-500"></div>
+              <div className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-green-500"></div>
             </div>
           </div>
-          <div className="flex-grow overflow-hidden"> {/* Cambiado para usar flex-grow en lugar de altura fija */}
+          
+          {/* Editor de código */}
+          <div className="flex-grow overflow-hidden h-[calc(100vh-270px)]">
             <CodeEditor
               height="100%"
+              width="100%"
               language="python"
               value={code}
               onChange={setCode}
@@ -667,38 +835,30 @@ const DataVisualization = () => {
               loading={<div className="h-full w-full flex items-center justify-center bg-gray-800 text-white">Cargando editor...</div>}
               onMount={handleEditorDidMount}
               options={{
-                // Mejoras clave para la visualización:
                 fontSize: 16,
                 fontFamily: "'Cascadia Code', Consolas, 'Source Code Pro', 'Courier New', monospace",
                 fontLigatures: true,
-                lineHeight: 22,
+                lineHeight: 24,
                 letterSpacing: 0.5,
-
-                // Mejor contraste y resaltado:
                 theme: "vs-dark",
                 semanticHighlighting: true,
                 renderLineHighlight: "all",
-
-                // Mejorar scroll y usabilidad:
                 mouseWheelZoom: true,
                 smoothScrolling: true,
                 cursorBlinking: "smooth",
                 cursorSmoothCaretAnimation: true,
-
-                // Ayudas visuales:
                 minimap: {
-                  enabled: true,
+                  enabled: false, // Desactivamos en móvil
                   scale: 1,
                   showSlider: "always",
                   size: "fill"
                 },
-
-                // Comportamiento del editor:
                 wordWrap: "on",
                 wordWrapColumn: 80,
                 wrappingIndent: "same",
                 autoClosingBrackets: "always",
                 formatOnPaste: true,
+                padding: { top: 16, bottom: 16 }, // Añadimos padding interno
                 suggest: {
                   showKeywords: true,
                   showSnippets: true,
@@ -707,10 +867,11 @@ const DataVisualization = () => {
             />
           </div>
         </div>
-
-        <div className="h-full flex flex-col">
-          {/* Encabezado mejorado de resultados */}
-          <div className="bg-gray-800 py-3 px-4 font-medium text-sm flex items-center justify-between border-b border-gray-700">
+        
+        {/* Panel de resultados - visible según pestaña en móvil */}
+        <div className={`h-[calc(100vh-200px)] flex flex-col ${mobileTab === 'result' ? 'block' : 'hidden'} lg:block`}>
+          {/* Encabezado de resultados - ALTURA AUMENTADA para consistencia */}
+          <div className="bg-gray-900 py-3 md:py-5 px-4 md:px-6 font-medium text-sm md:text-base flex items-center justify-between border-b border-gray-700">
             <div className="flex items-center">
               <FaDatabase className="mr-2 text-green-400" />
               <span className="text-white font-semibold">Resultados</span>
@@ -718,14 +879,39 @@ const DataVisualization = () => {
             {result && result.image_url && (
               <button
                 onClick={downloadImage}
-                className="text-blue-300 hover:text-blue-100 flex items-center text-sm bg-gray-700 px-3 py-1 rounded-md transition-colors"
+                className="text-blue-300 hover:text-blue-100 flex items-center text-xs md:text-sm bg-gray-700 px-2 md:px-3 py-1 md:py-2 rounded-md transition-colors"
               >
                 <FaDownload className="mr-1" /> Descargar
               </button>
             )}
           </div>
 
-          {renderContent()}
+          {/* Submenu de pestañas de resultados */}
+          <div className="bg-gray-50 flex border-b border-gray-200 text-xs md:text-sm">
+            <button
+              className={`py-2 px-3 md:px-4 font-medium ${viewMode === 'code' ? 'bg-white border-b-2 border-blue-500' : 'text-gray-600 hover:bg-gray-200'}`}
+              onClick={() => setViewMode('code')}
+            >
+              Resultados
+            </button>
+            <button
+              className={`py-2 px-3 md:px-4 font-medium ${viewMode === 'data' ? 'bg-white border-b-2 border-blue-500' : 'text-gray-600 hover:bg-gray-200'}`}
+              onClick={() => setViewMode('data')}
+            >
+              Datos
+            </button>
+            <button
+              className={`py-2 px-3 md:px-4 font-medium ${viewMode === 'about' ? 'bg-white border-b-2 border-blue-500' : 'text-gray-600 hover:bg-gray-200'}`}
+              onClick={() => setViewMode('about')}
+            >
+              Info
+            </button>
+          </div>
+
+          {/* Contenido de resultados */}
+          <div className="flex-1 overflow-hidden"> {/* Contenedor padre con overflow-hidden */}
+            {renderContent()}
+          </div>
         </div>
       </div>
     </motion.div>
