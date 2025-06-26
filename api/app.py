@@ -109,24 +109,20 @@ if not os.environ.get('KAGGLE_USERNAME') or not os.environ.get('KAGGLE_KEY'):
 
 # Flask setup
 app = Flask(__name__)
-# Configuración CORS mejorada
+# Configuración CORS mejorada - versión simplificada
 CORS(app, 
-     resources={
-         r"/*": {
-             "origins": [
-                 "http://localhost:5173",  # Vite dev server
-                 "http://localhost:4173",  # Vite preview
-                 "https://analiarojasaraya.pythonanywhere.com",
-                 "https://analiarojasaraya.github.io",  # Si usas GitHub Pages
-                 "http://192.168.1.17:5000",
-                 "null"  # Para pruebas locales
-             ],
-             "methods": ["GET", "POST", "OPTIONS"],
-             "allow_headers": ["Content-Type", "Authorization", "Accept"],
-             "supports_credentials": True,
-             "max_age": 3600
-         }
-     })
+     origins=[
+         "http://localhost:5173",
+         "http://localhost:4173",
+         "https://analiarojasaraya.pythonanywhere.com",
+         "https://analiarojasaraya.github.io",
+         "https://datascience-portafolio.web.app",
+         "http://192.168.1.17:5000"
+     ],
+     supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization", "Accept"],
+     methods=["GET", "POST", "OPTIONS"]
+)
 
 # Rutas de carpetas según entorno
 if 'PYTHONANYWHERE_DOMAIN' in os.environ:
@@ -137,6 +133,7 @@ if 'PYTHONANYWHERE_DOMAIN' in os.environ:
     KAGGLE_CONFIG_DIR = '/home/analiarojasaraya/.kaggle'
     DEBUG = False
 else:
+    # Configuración para desarrollo local
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     STATIC_DIR = os.path.join(BASE_DIR, 'static')
     UPLOAD_FOLDER = os.path.join(STATIC_DIR, 'plots')
@@ -712,6 +709,12 @@ def download_kaggle_dataset():
             'success': False,
             'error': str(e)
         }), 500
+
+@app.route('/api/kaggle/search', methods=['OPTIONS'])
+@app.route('/api/<path:path>', methods=['OPTIONS'])
+def handle_options(path=None):
+    response = jsonify({'status': 'ok'})
+    return response
 
 if __name__ == '__main__':
     try:
