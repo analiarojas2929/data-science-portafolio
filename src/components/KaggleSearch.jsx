@@ -80,7 +80,9 @@ const KaggleSearch = ({ onDatasetSelect }) => {
     setError(null);
     
     try {
-      const response = await fetch(`${VITE_API_URL}/api/kaggle/analyze`, {
+      // Corregir la construcción de la URL
+      const baseUrl = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/kaggle/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ dataset_ref: datasetRef })
