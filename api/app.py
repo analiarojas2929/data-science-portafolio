@@ -1,7 +1,34 @@
 # Cargar variables de entorno desde .env
 from dotenv import load_dotenv
-load_dotenv()  # Esto cargará las variables del archivo .env
+load_dotenv()
 
+# Actualizar configuración de logging
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler('api.log')
+    ]
+)
+logger = logging.getLogger(__name__)
+
+# Capturar errores no manejados
+def handle_exception(exc_type, exc_value, exc_traceback):
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+    logger.error("Excepción no manejada:", exc_info=(exc_type, exc_value, exc_traceback))
+
+import sys
+sys.excepthook = handle_exception
+
+# Importaciones estándar
+import time
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from flask import Flask, request, jsonify, send_file, redirect
 from flask_cors import CORS
 import pandas as pd
@@ -16,10 +43,65 @@ import uuid
 import os
 import zipfile
 from sklearn import datasets
+import glob
 
 # Importar Kaggle API
 import kaggle
 from kaggle.api.kaggle_api_extended import KaggleApi
+
+# Intentar importar kaggle_search desde diferentes ubicaciones
+try:
+    from .kaggle_search import buscar_datasets_kaggle as kaggle_search
+except ImportError:
+    try:
+        from kaggle_search import buscar_datasets_kaggle as kaggle_search
+    except ImportError:
+        # Definir función fallback que usa directamente la API de Kaggle
+        def kaggle_search(keyword, max_resultados=5):
+            logger.info(f"🔄 Usando API de Kaggle directamente para buscar: '{keyword}'")
+            try:
+                if not kaggle_available:
+                    logger.error("❌ API de Kaggle no disponible")
+                    return []
+                
+                # Usar la API de Kaggle para buscar datasets
+                datasets = kaggle_api.dataset_list(search=keyword, page_size=max_resultados)
+                results = []
+                
+                for dataset in datasets:
+                    try:
+                        ref = f"{dataset.ref}"
+                        if not ref:
+                            ref = f"{dataset.owner_username}/{dataset.slug}"
+                            
+                        results.append({
+                            'ref': ref,
+                            'titulo': dataset.title,
+                            'descripcion': dataset.subtitle or '',
+                            'descargas': getattr(dataset, 'downloadCount', 0),
+                            'tamaño': getattr(dataset, 'size', 0),
+                            'url': f"https://www.kaggle.com/datasets/{ref}"
+                        })
+                    except Exception as e:
+                        logger.error(f"Error procesando dataset: {str(e)}")
+                        continue
+                
+                return results
+            except Exception as e:
+                logger.error(f"Error en búsqueda con API de Kaggle: {str(e)}")
+                return []
+
+# Definir función de sesión Kaggle primero
+def create_kaggle_session():
+    """Crea una sesión de requests con reintentos"""
+    session = requests.Session()
+    retries = Retry(
+        total=5,
+        backoff_factor=0.1,
+        status_forcelist=[500, 502, 503, 504]
+    )
+    session.mount('https://', HTTPAdapter(max_retries=retries))
+    return session
 
 # Verificar que las variables de entorno estén presentes
 if not os.environ.get('KAGGLE_USERNAME') or not os.environ.get('KAGGLE_KEY'):
@@ -27,18 +109,45 @@ if not os.environ.get('KAGGLE_USERNAME') or not os.environ.get('KAGGLE_KEY'):
 
 # Flask setup
 app = Flask(__name__)
-CORS(app, origins=["*"], supports_credentials=True, allow_headers=["Content-Type", "Authorization"])
+# Configuración CORS mejorada
+CORS(app, 
+     resources={
+         r"/*": {
+             "origins": [
+                 "http://localhost:5173",  # Vite dev server
+                 "http://localhost:4173",  # Vite preview
+                 "https://analiarojasaraya.pythonanywhere.com",
+                 "https://analiarojasaraya.github.io",  # Si usas GitHub Pages
+                 "http://192.168.1.17:5000",
+                 "null"  # Para pruebas locales
+             ],
+             "methods": ["GET", "POST", "OPTIONS"],
+             "allow_headers": ["Content-Type", "Authorization", "Accept"],
+             "supports_credentials": True,
+             "max_age": 3600
+         }
+     })
 
 # Rutas de carpetas según entorno
 if 'PYTHONANYWHERE_DOMAIN' in os.environ:
-    UPLOAD_FOLDER = '/home/analiarojasaraya/data-science-portafolio/static/plots'
-    DATASETS_FOLDER = '/home/analiarojasaraya/data-science-portafolio/datasets'
+    BASE_DIR = '/home/analiarojasaraya/data-science-portafolio'
+    STATIC_DIR = os.path.join(BASE_DIR, 'static')
+    UPLOAD_FOLDER = os.path.join(STATIC_DIR, 'plots')
+    DATASETS_FOLDER = os.path.join(BASE_DIR, 'datasets')
+    KAGGLE_CONFIG_DIR = '/home/analiarojasaraya/.kaggle'
+    DEBUG = False
 else:
-    UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'plots')
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    STATIC_DIR = os.path.join(BASE_DIR, 'static')
+    UPLOAD_FOLDER = os.path.join(STATIC_DIR, 'plots')
     DATASETS_FOLDER = 'datasets'
+    KAGGLE_CONFIG_DIR = os.path.expanduser('~/.kaggle')
+    DEBUG = True
 
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(DATASETS_FOLDER, exist_ok=True)
+# Crear directorios necesarios
+for directory in [STATIC_DIR, UPLOAD_FOLDER, DATASETS_FOLDER, KAGGLE_CONFIG_DIR]:
+    os.makedirs(directory, exist_ok=True)
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Servir imágenes de gráficos
@@ -64,13 +173,22 @@ def init_kaggle_api():
     try:
         api = KaggleApi()
         api.authenticate()
-        print("✅ API de Kaggle autenticada correctamente")
+        api._session = create_kaggle_session()
+        logger.info("✅ API de Kaggle autenticada correctamente")
         return api
     except Exception as e:
-        print(f"❌ Error al autenticar la API de Kaggle: {e}")
+        logger.error(f"❌ Error al autenticar la API de Kaggle: {e}")
         return None
 
+def setup_proxy():
+    """Configura el proxy si está definido"""
+    proxy = os.environ.get('https_proxy')
+    if proxy:
+        os.environ['KAGGLE_PROXY'] = proxy
+        logger.info(f"Proxy configurado: {proxy}")
+
 setup_kaggle_credentials()
+setup_proxy()  # Llamar antes de init_kaggle_api()
 kaggle_api = init_kaggle_api()
 kaggle_available = kaggle_api is not None
 
@@ -255,7 +373,71 @@ def hello():
 @app.route('/api')
 def docs():
     return jsonify({
-        "endpoints": ["/api/hello", "/api/datasets", "/api/code/run", "/api/code/sample", "/api/status/kaggle"]
+        "title": "API de Análisis de Datos",
+        "version": "1.0",
+        "endpoints": [
+            {
+                "path": "/api/hello",
+                "method": "GET",
+                "description": "Verifica si la API está funcionando"
+            },
+            {
+                "path": "/api/datasets",
+                "method": "GET",
+                "description": "Obtiene la lista de datasets disponibles"
+            },
+            {
+                "path": "/api/code/run",
+                "method": "POST",
+                "description": "Ejecuta código Python y devuelve resultados",
+                "body": {
+                    "code": "string",
+                    "dataset": "string (opcional)"
+                }
+            },
+            {
+                "path": "/api/code/sample",
+                "method": "GET",
+                "description": "Obtiene código de ejemplo para un dataset",
+                "query": {
+                    "dataset": "string (opcional, default: iris)"
+                }
+            },
+            {
+                "path": "/api/status/kaggle",
+                "method": "GET",
+                "description": "Verifica el estado de la conexión con Kaggle"
+            },
+            {
+                "path": "/api/kaggle/search",
+                "method": "GET",
+                "description": "Busca datasets en Kaggle",
+                "query": {
+                    "keyword": "string (requerido)"
+                }
+            },
+            {
+                "path": "/api/kaggle/download",
+                "method": "POST",
+                "description": "Descarga y preprocesa un dataset de Kaggle",
+                "body": {
+                    "dataset_ref": "string (requerido, formato: username/dataset-slug)"
+                },
+                "response": {
+                    "success": "boolean",
+                    "dataset_ref": "string",
+                    "files": "array de archivos CSV con información y vista previa"
+                }
+            },
+            {
+                "path": "/api/kaggle/analyze",
+                "method": "POST",
+                "description": "Analiza un dataset específico de Kaggle",
+                "body": {
+                    "dataset_ref": "string (requerido)"
+                }
+            }
+        ]
     })
 
 @app.before_request
@@ -275,8 +457,277 @@ def enforce_https():
     if request.headers.get('X-Forwarded-Proto') == 'http':
         return redirect(request.url.replace('http://', 'https://', 1), code=301)
 
+def buscar_datasets_kaggle(keyword, max_resultados=5):
+    """Adapta los resultados de kaggle_search al formato de la API"""
+    try:
+        # Usar la función que sabemos que funciona
+        results = kaggle_search(keyword, max_resultados)
+        
+        # Adaptar el formato de los resultados
+        formatted_results = [{
+            'id': r['ref'],
+            'name': r['titulo'],
+            'description': r['descripcion'],
+            'downloadCount': r['descargas'],
+            'size': f"{r['tamaño'] / 1024 / 1024:.1f} MB",
+            'url': r['url']
+        } for r in results]
+        
+        return formatted_results
+
+    except Exception as e:
+        logger.error(f"Error buscando datasets: {str(e)}")
+        return []
+
+@app.route('/api/kaggle/search', methods=['GET'])
+def search_kaggle_datasets():
+    try:
+        keyword = request.args.get('keyword', '').strip()
+        logger.info(f"🔍 Nueva búsqueda recibida: '{keyword}'")
+        
+        if not keyword:
+            return jsonify({
+                'success': False,
+                'error': 'Por favor ingresa un término de búsqueda',
+                'suggestions': [
+                    'soccer', 'football', 'sports',  # Términos en inglés
+                    'world cup', 'premier league'
+                ]
+            }), 400
+
+        # Traducir términos comunes al inglés
+        term_translations = {
+            'futbol': 'soccer',
+            'fútbol': 'soccer',
+            'deportes': 'sports'
+        }
+        
+        # Traducir si es necesario
+        search_term = term_translations.get(keyword.lower(), keyword)
+        logger.info(f"🔄 Término de búsqueda traducido: '{search_term}'")
+        
+        # Usar la función importada de kaggle_search.py
+        results = kaggle_search(search_term)
+        
+        if results:
+            # Los resultados ya vienen en el formato correcto
+            formatted_results = [{
+                'id': r['ref'],
+                'name': r['titulo'],
+                'description': r['descripcion'],
+                'downloadCount': r['descargas'],
+                'size': f"{r['tamaño'] / 1024 / 1024:.1f} MB",
+                'url': r['url']
+            } for r in results]
+
+            logger.info(f"✅ Se encontraron {len(formatted_results)} datasets")
+            return jsonify({
+                'success': True,
+                'query': search_term,
+                'count': len(formatted_results),
+                'results': formatted_results
+            })
+        else:
+            logger.warning(f"❌ No se encontraron resultados para: {search_term}")
+            return jsonify({
+                'success': True,
+                'query': search_term,
+                'count': 0,
+                'message': f"No se encontraron datasets para '{keyword}'",
+                'suggestions': [
+                    'Intenta con estos términos en inglés:',
+                    '- soccer (para fútbol)',
+                    '- sports (para deportes)',
+                    '- football statistics',
+                    '- world cup data'
+                ]
+            })
+
+    except Exception as e:
+        logger.error(f"❌ Error en búsqueda: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+# Nuevo endpoint para descargar y analizar un dataset específico
+@app.route('/api/kaggle/analyze', methods=['POST'])
+def analyze_kaggle_dataset():
+    data = request.json
+    dataset_ref = data.get('dataset_ref')
+    
+    if not dataset_ref:
+        return jsonify({'error': 'Se requiere una referencia al dataset'}), 400
+    
+    try:
+        # Descargar el dataset
+        path = os.path.join(DATASETS_FOLDER, dataset_ref.replace('/', '_'))
+        os.makedirs(path, exist_ok=True)
+        
+        # Descargar y extraer
+        logger.info(f"📦 Descargando dataset: {dataset_ref}")
+        kaggle_api.dataset_download_files(dataset_ref, path=path, unzip=True)
+        
+        # Buscar el primer CSV
+        csv_files = glob.glob(os.path.join(path, "**/*.csv"), recursive=True)
+        if not csv_files:
+            return jsonify({'error': 'No se encontraron archivos CSV'}), 404
+            
+        # Cargar y analizar el CSV
+        logger.info(f"📊 Analizando CSV: {csv_files[0]}")
+        df = pd.read_csv(csv_files[0])
+        
+        # Generar visualizaciones básicas
+        results = []
+        plt.switch_backend('Agg')
+        
+        # 1. Correlación si hay columnas numéricas
+        numeric_cols = df.select_dtypes(include=['number']).columns
+        if len(numeric_cols) > 1:
+            plt.figure(figsize=(10, 8))
+            # Usar una matriz de correlación más pequeña si hay muchas columnas
+            if len(numeric_cols) > 10:
+                # Seleccionar las 10 columnas numéricas con más variabilidad
+                numeric_df = df[numeric_cols].copy()
+                top_cols = numeric_df.var().nlargest(10).index.tolist()
+                corr_df = df[top_cols].corr()
+            else:
+                corr_df = df[numeric_cols].corr()
+                
+            sns.heatmap(corr_df, annot=True, fmt='.2f', cmap='coolwarm')
+            plt.title('Matriz de Correlación')
+            filename = f"corr_{uuid.uuid4()}.png"
+            plt.savefig(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            plt.close()
+            results.append({
+                'type': 'correlation',
+                'image_url': f"/static/plots/{filename}"
+            })
+        
+        # 2. Distribuciones numéricas (máximo 5 columnas)
+        for col in numeric_cols[:5]:
+            plt.figure(figsize=(8, 6))
+            sns.histplot(df[col].dropna(), kde=True)
+            plt.title(f'Distribución de {col}')
+            plt.grid(True, alpha=0.3)
+            filename = f"dist_{col}_{uuid.uuid4()}.png"
+            plt.savefig(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            plt.close()
+            results.append({
+                'type': 'distribution',
+                'column': col,
+                'image_url': f"/static/plots/{filename}"
+            })
+        
+        # 3. Gráficos de barras para columnas categóricas
+        categorical_cols = df.select_dtypes(include=['object']).columns
+        for col in categorical_cols[:3]:  # Limitamos a 3 columnas categóricas
+            if df[col].nunique() <= 20:  # Solo si hay 20 o menos categorías
+                plt.figure(figsize=(10, 6))
+                value_counts = df[col].value_counts().nlargest(15)
+                sns.barplot(x=value_counts.index, y=value_counts.values)
+                plt.title(f'Frecuencia de {col}')
+                plt.xticks(rotation=45, ha='right')
+                plt.tight_layout()
+                filename = f"cat_{col}_{uuid.uuid4()}.png"
+                plt.savefig(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                plt.close()
+                results.append({
+                    'type': 'categorical',
+                    'column': col,
+                    'image_url': f"/static/plots/{filename}"
+                })
+        
+        return jsonify({
+            'success': True,
+            'dataset_info': {
+                'rows': len(df),
+                'columns': len(df.columns),
+                'columns_info': {
+                    'numeric': numeric_cols.tolist(),
+                    'categorical': categorical_cols.tolist()
+                },
+                'null_counts': df.isnull().sum().to_dict(),
+                'file_name': os.path.basename(csv_files[0])
+            },
+            'visualizations': results
+        })
+        
+    except Exception as e:
+        logger.error(f"❌ Error analizando dataset: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/kaggle/download', methods=['POST'])
+def download_kaggle_dataset():
+    try:
+        data = request.json
+        dataset_ref = data.get('dataset_ref')
+        
+        if not dataset_ref:
+            return jsonify({
+                'success': False,
+                'error': 'Se requiere una referencia al dataset'
+            }), 400
+            
+        # Crear directorio para el dataset
+        dataset_dir = os.path.join(DATASETS_FOLDER, dataset_ref.replace('/', '_'))
+        os.makedirs(dataset_dir, exist_ok=True)
+        
+        # Descargar dataset
+        kaggle_api.dataset_download_files(dataset_ref, path=dataset_dir, unzip=True)
+        
+        # Listar archivos descargados
+        files = []
+        for file in os.listdir(dataset_dir):
+            file_path = os.path.join(dataset_dir, file)
+            if file.endswith('.csv'):
+                try:
+                    df = pd.read_csv(file_path)
+                    files.append({
+                        'name': file,
+                        'size': os.path.getsize(file_path),
+                        'rows': len(df),
+                        'columns': len(df.columns),
+                        'preview': df.head().to_dict('records')
+                    })
+                except:
+                    files.append({
+                        'name': file,
+                        'size': os.path.getsize(file_path),
+                        'error': 'No se pudo leer el archivo'
+                    })
+                    
+        return jsonify({
+            'success': True,
+            'dataset_ref': dataset_ref,
+            'files': files
+        })
+        
+    except Exception as e:
+        logger.error(f"Error descargando dataset: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 if __name__ == '__main__':
-    if 'PYTHONANYWHERE_DOMAIN' in os.environ:
-        print("⛅ Ejecutando en PythonAnywhere")
-    else:
+    try:
+        logger.info("🚀 Iniciando servidor API...")
+        # Verificar estado de Kaggle
+        if kaggle_available:
+            logger.info("✅ API de Kaggle disponible y configurada")
+        else:
+            logger.warning("⚠️ API de Kaggle no disponible")
+            
+        # Verificar directorios
+        logger.info(f"📁 Directorio de uploads: {UPLOAD_FOLDER}")
+        logger.info(f"📁 Directorio de datasets: {DATASETS_FOLDER}")
+        
+        # Iniciar servidor
         app.run(debug=True, host='0.0.0.0', port=5000)
+    except Exception as e:
+        logger.error(f"❌ Error fatal iniciando la aplicación: {str(e)}")
+        raise

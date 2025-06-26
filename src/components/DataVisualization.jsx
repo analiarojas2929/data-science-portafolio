@@ -3,6 +3,7 @@ import { FaPlayCircle, FaDownload, FaCode, FaDatabase, FaExclamationTriangle, Fa
 import { motion } from 'framer-motion';
 import CodeEditor from '@monaco-editor/react';
 import { loader } from '@monaco-editor/react';
+import KaggleSearch from './KaggleSearch';
 
 // Reemplaza todas las URL hardcodeadas con la variable de entorno
 const API_URL = import.meta.env?.VITE_API_URL;
@@ -264,6 +265,7 @@ const DataVisualization = () => {
   const [backendAvailable, setBackendAvailable] = useState(false);
   const [viewMode, setViewMode] = useState('code'); // 'code', 'data', 'about'
   const [editorReady, setEditorReady] = useState(false);
+  const [showKaggleSearch, setShowKaggleSearch] = useState(false);
 
   // Comprobar si el backend está disponible e inicializar
   useEffect(() => {
@@ -387,6 +389,32 @@ const DataVisualization = () => {
         ? prev.filter(i => i !== rowIndex) 
         : [...prev, rowIndex]
     );
+  };
+
+  // Añadida esta función para manejar la selección de datasets
+  const handleDatasetSelect = async (datasetRef) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/kaggle/analyze`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ dataset_ref: datasetRef }),
+      });
+      
+      const data = await response.json();
+      if (data.success) {
+        setResult(data);
+        setShowKaggleSearch(false); // Cerrar el buscador
+      } else {
+        setError(data.error);
+      }
+    } catch (err) {
+      setError('Error al analizar el dataset');
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Modificación completa del renderContent con scroll en todas las secciones
@@ -750,6 +778,15 @@ const DataVisualization = () => {
           <FaCode className="mr-2" /> Analizador de Datos Interactivo
         </h2>
         <div className="flex items-center space-x-2 md:space-x-4">
+          {/* Nuevo botón de búsqueda Kaggle */}
+          <button
+            onClick={() => setShowKaggleSearch(!showKaggleSearch)}
+            className="bg-[#20BEFF] hover:bg-[#1aa8e6] text-white px-3 py-1.5 rounded-md text-sm flex items-center gap-2"
+          >
+            <FaKaggle />
+            Buscar en Kaggle
+          </button>
+          
           <div className="flex items-center">
             <span className="text-gray-300 text-xs md:text-sm mr-1 md:mr-2">Dataset:</span>
             <select
@@ -785,6 +822,15 @@ const DataVisualization = () => {
           </button>
         </div>
       </div>
+
+      {/* Modal de búsqueda Kaggle */}
+      {showKaggleSearch && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-3xl">
+            <KaggleSearch onDatasetSelect={handleDatasetSelect} />
+          </div>
+        </div>
+      )}
 
       {/* Pestañas para móvil - esto es lo principal */}
       <div className="lg:hidden flex border-b border-gray-200">
