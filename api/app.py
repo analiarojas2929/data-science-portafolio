@@ -57,6 +57,7 @@ except ImportError:
         from kaggle_search import buscar_datasets_kaggle as kaggle_search
     except ImportError:
         # Definir función fallback que usa directamente la API de Kaggle
+        # Modifica la función de fallback para filtrar por tamaño
         def kaggle_search(keyword, max_resultados=5):
             logger.info(f"🔄 Usando API de Kaggle directamente para buscar: '{keyword}'")
             try:
@@ -65,23 +66,35 @@ except ImportError:
                     return []
                 
                 # Usar la API de Kaggle para buscar datasets
-                datasets = kaggle_api.dataset_list(search=keyword, page_size=max_resultados)
+                datasets = kaggle_api.dataset_list(search=keyword, page_size=max_resultados * 3)  # Buscar más para compensar el filtrado
                 results = []
+                
+                MAX_SIZE_MB = 10  # Tamaño máximo en MB
                 
                 for dataset in datasets:
                     try:
                         ref = f"{dataset.ref}"
                         if not ref:
                             ref = f"{dataset.owner_username}/{dataset.slug}"
-                            
-                        results.append({
-                            'ref': ref,
-                            'titulo': dataset.title,
-                            'descripcion': dataset.subtitle or '',
-                            'descargas': getattr(dataset, 'downloadCount', 0),
-                            'tamaño': getattr(dataset, 'size', 0),
-                            'url': f"https://www.kaggle.com/datasets/{ref}"
-                        })
+                        
+                        # Convertir el tamaño a MB
+                        size_mb = getattr(dataset, 'size', 0) / (1024 * 1024)
+                        
+                        # Solo incluir datasets menores a MAX_SIZE_MB
+                        if size_mb <= MAX_SIZE_MB:
+                            results.append({
+                                'ref': ref,
+                                'titulo': dataset.title,
+                                'descripcion': dataset.subtitle or '',
+                                'descargas': getattr(dataset, 'downloadCount', 0),
+                                'tamaño': getattr(dataset, 'size', 0),
+                                'tamaño_mb': size_mb,
+                                'url': f"https://www.kaggle.com/datasets/{ref}"
+                            })
+                        
+                        # Limitar a max_resultados
+                        if len(results) >= max_resultados:
+                            break
                     except Exception as e:
                         logger.error(f"Error procesando dataset: {str(e)}")
                         continue
@@ -506,10 +519,10 @@ def search_kaggle_datasets():
         logger.info(f"🔄 Término de búsqueda traducido: '{search_term}'")
         
         # Usar la función importada de kaggle_search.py
-        results = kaggle_search(search_term)
+        results = kaggle_search(search_term, max_resultados=8)  # Aumentamos para compensar el filtrado
         
         if results:
-            # Los resultados ya vienen en el formato correcto
+            # Los resultados ya vienen en el formato correcto y filtrados por tamaño
             formatted_results = [{
                 'id': r['ref'],
                 'name': r['titulo'],
@@ -524,7 +537,8 @@ def search_kaggle_datasets():
                 'success': True,
                 'query': search_term,
                 'count': len(formatted_results),
-                'results': formatted_results
+                'results': formatted_results,
+                'note': 'Se muestran solo datasets menores a 10MB para un análisis más rápido'
             })
         else:
             logger.warning(f"❌ No se encontraron resultados para: {search_term}")
@@ -532,7 +546,7 @@ def search_kaggle_datasets():
                 'success': True,
                 'query': search_term,
                 'count': 0,
-                'message': f"No se encontraron datasets para '{keyword}'",
+                'message': f"No se encontraron datasets pequeños (< 10MB) para '{keyword}'",
                 'suggestions': [
                     'Intenta con estos términos en inglés:',
                     '- soccer (para fútbol)',
