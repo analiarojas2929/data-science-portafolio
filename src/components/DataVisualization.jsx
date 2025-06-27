@@ -391,7 +391,7 @@ const DataVisualization = () => {
     );
   };
 
-  // Añadida esta función para manejar la selección de datasets
+  // Modifica la función handleDatasetSelect para que use el código generado por el backend
   const handleDatasetSelect = async (datasetRef) => {
     setLoading(true);
     try {
@@ -405,8 +405,27 @@ const DataVisualization = () => {
       
       const data = await response.json();
       if (data.success) {
+        // Actualizar el resultado
         setResult(data);
-        setShowKaggleSearch(false); // Cerrar el buscador
+        
+        // Actualizar el código en el editor con el código generado
+        if (data.data && data.data.code) {
+          setCode(data.data.code);
+        }
+        
+        // En móvil, cambiar a la pestaña del editor para mostrar el código
+        setMobileTab('editor');
+        
+        // Cerrar el buscador de Kaggle
+        setShowKaggleSearch(false);
+        
+        // Opcional: hacer scroll al editor
+        setTimeout(() => {
+          const editorElement = document.querySelector('.monaco-editor');
+          if (editorElement) {
+            editorElement.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 300);
       } else {
         setError(data.error);
       }
@@ -827,7 +846,10 @@ const DataVisualization = () => {
       {showKaggleSearch && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-3xl">
-            <KaggleSearch onDatasetSelect={handleDatasetSelect} />
+            <KaggleSearch 
+  onDatasetSelect={handleDatasetSelect} 
+  onClose={() => setShowKaggleSearch(false)} 
+/>
           </div>
         </div>
       )}

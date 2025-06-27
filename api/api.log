@@ -835,3 +835,226 @@ ValueError: urls must start with a leading slash
 2025-06-26 18:06:57,477 - WARNING -  * Running on all addresses.
    WARNING: This is a development server. Do not use it in a production deployment.
 2025-06-26 18:06:57,477 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 18:10:55,150 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 18:10:55,169 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 18:10:55,170 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 18:10:55,170 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 18:10:55,170 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 18:10:55,184 - INFO -  * Restarting with stat
+2025-06-26 18:10:57,119 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 18:10:57,128 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 18:10:57,128 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 18:10:57,128 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 18:10:57,128 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 18:10:57,135 - WARNING -  * Debugger is active!
+2025-06-26 18:10:57,139 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 18:10:57,222 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 18:10:57,223 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 18:13:53,558 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-26 18:13:53,858 - INFO -  * Restarting with stat
+2025-06-26 18:13:56,319 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 18:13:56,320 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 18:13:56,320 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 18:13:56,320 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 18:13:56,320 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 18:13:56,332 - WARNING -  * Debugger is active!
+2025-06-26 18:13:56,338 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 18:13:56,441 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 18:13:56,441 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 18:14:54,080 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-26 18:14:54,556 - INFO -  * Restarting with stat
+2025-06-26 18:14:56,883 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 18:14:56,884 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 18:14:56,884 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 18:14:56,884 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 18:14:56,884 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 18:14:56,892 - WARNING -  * Debugger is active!
+2025-06-26 18:14:56,892 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 18:14:56,990 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 18:14:56,990 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 18:16:35,797 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-26 18:16:36,321 - INFO -  * Restarting with stat
+2025-06-26 18:16:38,403 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 18:16:38,409 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 18:16:38,410 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 18:16:38,410 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 18:16:38,411 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 18:16:38,418 - WARNING -  * Debugger is active!
+2025-06-26 18:16:38,421 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 18:16:38,507 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 18:16:38,507 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 18:23:31,687 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-26 18:23:33,424 - INFO -  * Restarting with stat
+2025-06-26 18:23:41,738 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 18:23:41,749 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 18:23:41,750 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 18:23:41,750 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 18:23:41,750 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 18:23:41,770 - WARNING -  * Debugger is active!
+2025-06-26 18:23:41,789 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 18:23:42,144 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 18:23:42,145 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 18:24:03,827 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-26 18:24:04,428 - INFO -  * Restarting with stat
+2025-06-26 18:24:08,125 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 18:24:08,134 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 18:24:08,134 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 18:24:08,135 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 18:24:08,135 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 18:24:08,147 - WARNING -  * Debugger is active!
+2025-06-26 18:24:08,151 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 18:24:08,342 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 18:24:08,343 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 18:35:05,530 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-26 18:35:06,513 - INFO -  * Restarting with stat
+2025-06-26 18:35:11,891 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 18:35:11,911 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 18:35:11,912 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 18:35:11,912 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 18:35:11,912 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 18:35:11,928 - WARNING -  * Debugger is active!
+2025-06-26 18:35:11,933 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 18:35:12,179 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 18:35:12,180 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 18:38:01,112 - INFO - 127.0.0.1 - - [26/Jun/2025 18:38:01] "[33mGET / HTTP/1.1[0m" 404 -
+2025-06-26 18:38:03,532 - INFO - 127.0.0.1 - - [26/Jun/2025 18:38:03] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-26 18:39:25,616 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 18:39:25,632 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 18:39:25,632 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 18:39:25,633 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 18:39:25,633 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 18:39:25,668 - INFO -  * Restarting with stat
+2025-06-26 18:39:30,118 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 18:39:30,138 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 18:39:30,138 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 18:39:30,139 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 18:39:30,139 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 18:39:30,150 - WARNING -  * Debugger is active!
+2025-06-26 18:39:30,168 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 18:39:30,362 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 18:39:30,362 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 19:18:01,096 - INFO - 127.0.0.1 - - [26/Jun/2025 19:18:01] "GET /api HTTP/1.1" 200 -
+2025-06-26 19:20:00,224 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 19:20:00,251 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 19:20:00,252 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 19:20:00,276 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 19:20:00,277 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 19:20:00,407 - INFO -  * Restarting with stat
+2025-06-26 19:20:04,919 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 19:20:04,932 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 19:20:04,932 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 19:20:04,932 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 19:20:04,933 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 19:20:04,941 - WARNING -  * Debugger is active!
+2025-06-26 19:20:04,956 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 19:20:05,414 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 19:20:05,416 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 19:21:49,433 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-26 19:21:51,153 - INFO -  * Restarting with stat
+2025-06-26 19:21:59,328 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 19:21:59,346 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 19:21:59,346 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 19:21:59,347 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 19:21:59,349 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 19:21:59,369 - WARNING -  * Debugger is active!
+2025-06-26 19:21:59,386 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 19:21:59,713 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 19:21:59,714 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 19:22:37,272 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-26 19:22:37,793 - INFO -  * Restarting with stat
+2025-06-26 19:22:43,785 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 19:22:43,805 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 19:22:43,805 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 19:22:43,805 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 19:22:43,810 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 19:22:43,833 - WARNING -  * Debugger is active!
+2025-06-26 19:22:43,845 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 19:22:44,066 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 19:22:44,066 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 19:26:12,539 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 19:26:12,570 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 19:26:12,571 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 19:26:12,571 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 19:26:12,571 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 19:26:12,606 - INFO -  * Restarting with stat
+2025-06-26 19:26:16,493 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 19:26:16,502 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 19:26:16,502 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 19:26:16,502 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 19:26:16,502 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 19:26:16,511 - WARNING -  * Debugger is active!
+2025-06-26 19:26:16,527 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 19:26:16,684 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 19:26:16,685 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-26 19:30:21,248 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 19:30:21,248 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 19:30:21,248 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 19:30:21,248 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 19:30:21,248 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 19:30:21,287 - INFO -  * Restarting with stat
+2025-06-26 19:30:25,980 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-26 19:30:25,994 - INFO - 🚀 Iniciando servidor API...
+2025-06-26 19:30:25,995 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-26 19:30:25,995 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-26 19:30:25,996 - INFO - 📁 Directorio de datasets: datasets
+2025-06-26 19:30:26,010 - WARNING -  * Debugger is active!
+2025-06-26 19:30:26,026 - INFO -  * Debugger PIN: 162-099-548
+2025-06-26 19:30:26,517 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-26 19:30:26,518 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-27 10:44:54,454 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-27 10:44:58,213 - INFO -  * Restarting with stat
+2025-06-27 10:45:29,006 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 10:45:29,038 - INFO - 🚀 Iniciando servidor API...
+2025-06-27 10:45:29,038 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-27 10:45:29,038 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 10:45:29,038 - INFO - 📁 Directorio de datasets: datasets
+2025-06-27 10:45:29,108 - WARNING -  * Debugger is active!
+2025-06-27 10:45:29,165 - INFO -  * Debugger PIN: 162-099-548
+2025-06-27 10:45:30,171 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-27 10:45:30,171 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-27 10:48:11,116 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-27 10:48:11,568 - INFO -  * Restarting with stat
+2025-06-27 10:48:32,400 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 10:48:32,416 - INFO - 🚀 Iniciando servidor API...
+2025-06-27 10:48:32,416 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-27 10:48:32,416 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 10:48:32,416 - INFO - 📁 Directorio de datasets: datasets
+2025-06-27 10:48:32,456 - INFO -  * Restarting with stat
+2025-06-27 10:48:36,775 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 10:48:36,795 - INFO - 🚀 Iniciando servidor API...
+2025-06-27 10:48:36,795 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-27 10:48:36,795 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 10:48:36,795 - INFO - 📁 Directorio de datasets: datasets
+2025-06-27 10:48:36,819 - WARNING -  * Debugger is active!
+2025-06-27 10:48:36,829 - INFO -  * Debugger PIN: 162-099-548
+2025-06-27 10:48:37,052 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-27 10:48:37,052 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-27 10:49:03,663 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-27 10:49:04,049 - INFO -  * Restarting with stat
+2025-06-27 10:49:09,487 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 10:49:09,505 - INFO - 🚀 Iniciando servidor API...
+2025-06-27 10:49:09,505 - INFO - ✅ API de Kaggle disponible y configurada
+2025-06-27 10:49:09,505 - INFO - 📁 Directorio de uploads: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 10:49:09,505 - INFO - 📁 Directorio de datasets: datasets
+2025-06-27 10:49:09,511 - WARNING -  * Debugger is active!
+2025-06-27 10:49:09,521 - INFO -  * Debugger PIN: 162-099-548
+2025-06-27 10:49:09,664 - WARNING -  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2025-06-27 10:49:09,664 - INFO -  * Running on http://192.168.1.17:5000/ (Press CTRL+C to quit)
+2025-06-27 10:53:21,751 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 10:53:21,787 - INFO -  * Restarting with stat

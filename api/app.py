@@ -113,6 +113,7 @@ app = Flask(__name__)
 CORS(app, 
      origins=[
          "http://localhost:5173",
+         "http://localhost:5000",
          "http://localhost:4173",
          "https://analiarojasaraya.pythonanywhere.com",
          "https://analiarojasaraya.github.io",
@@ -137,13 +138,14 @@ else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     STATIC_DIR = os.path.join(BASE_DIR, 'static')
     UPLOAD_FOLDER = os.path.join(STATIC_DIR, 'plots')
-    DATASETS_FOLDER = 'datasets'
+    DATASETS_FOLDER = os.path.join(os.path.dirname(BASE_DIR), 'api', 'datasets')  # Ruta corregida
     KAGGLE_CONFIG_DIR = os.path.expanduser('~/.kaggle')
     DEBUG = True
 
 # Crear directorios necesarios
 for directory in [STATIC_DIR, UPLOAD_FOLDER, DATASETS_FOLDER, KAGGLE_CONFIG_DIR]:
     os.makedirs(directory, exist_ok=True)
+    logger.info(f"Directorio creado/verificado: {directory}")
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -550,112 +552,160 @@ def search_kaggle_datasets():
 # Nuevo endpoint para descargar y analizar un dataset específico
 @app.route('/api/kaggle/analyze', methods=['POST'])
 def analyze_kaggle_dataset():
-    data = request.json
-    dataset_ref = data.get('dataset_ref')
-    
-    if not dataset_ref:
-        return jsonify({'error': 'Se requiere una referencia al dataset'}), 400
-    
     try:
-        # Descargar el dataset
-        path = os.path.join(DATASETS_FOLDER, dataset_ref.replace('/', '_'))
-        os.makedirs(path, exist_ok=True)
+        # Obtener la referencia del dataset desde la solicitud
+        data = request.get_json()
         
-        # Descargar y extraer
-        logger.info(f"📦 Descargando dataset: {dataset_ref}")
-        kaggle_api.dataset_download_files(dataset_ref, path=path, unzip=True)
+        # Verificar si es un diccionario o una cadena
+        if isinstance(data, dict):
+            dataset_ref = data.get('id', data.get('dataset_ref', ''))
+        else:
+            dataset_ref = data
         
-        # Buscar el primer CSV
-        csv_files = glob.glob(os.path.join(path, "**/*.csv"), recursive=True)
+        if not dataset_ref:
+            return jsonify({'error': 'No se proporcionó referencia del dataset'}), 400
+        
+        logger.info(f"Analizando dataset: {dataset_ref}")
+        
+        # Crear directorio para el dataset
+        dataset_dir = os.path.join(DATASETS_FOLDER, str(dataset_ref).replace('/', '_'))
+        os.makedirs(dataset_dir, exist_ok=True)
+        
+        # Descargar dataset si no existe
+        csv_files = [f for f in os.listdir(dataset_dir) if f.endswith('.csv')]
         if not csv_files:
-            return jsonify({'error': 'No se encontraron archivos CSV'}), 404
+            logger.info(f"Descargando dataset: {dataset_ref}")
+            kaggle_api.dataset_download_files(dataset_ref, path=dataset_dir, unzip=True)
+            csv_files = [f for f in os.listdir(dataset_dir) if f.endswith('.csv')]
+        
+        if not csv_files:
+            return jsonify({'error': 'No se encontraron archivos CSV en el dataset'}), 400
+        
+        # Tomar el primer archivo CSV
+        csv_file = os.path.join(dataset_dir, csv_files[0])
+        
+        # Leer y analizar el dataset
+        df = pd.read_csv(csv_file)
+        
+        # Generar estadísticas básicas
+        num_rows = len(df)
+        num_cols = len(df.columns)
+        
+        # Estadísticas descriptivas
+        try:
+            numeric_columns = df.select_dtypes(include=['number']).columns.tolist()
+            categorical_columns = df.select_dtypes(include=['object']).columns.tolist()
             
-        # Cargar y analizar el CSV
-        logger.info(f"📊 Analizando CSV: {csv_files[0]}")
-        df = pd.read_csv(csv_files[0])
-        
-        # Generar visualizaciones básicas
-        results = []
-        plt.switch_backend('Agg')
-        
-        # 1. Correlación si hay columnas numéricas
-        numeric_cols = df.select_dtypes(include=['number']).columns
-        if len(numeric_cols) > 1:
-            plt.figure(figsize=(10, 8))
-            # Usar una matriz de correlación más pequeña si hay muchas columnas
-            if len(numeric_cols) > 10:
-                # Seleccionar las 10 columnas numéricas con más variabilidad
-                numeric_df = df[numeric_cols].copy()
-                top_cols = numeric_df.var().nlargest(10).index.tolist()
-                corr_df = df[top_cols].corr()
+            # Determinar columnas para visualización
+            x_col = numeric_columns[0] if numeric_columns else df.columns[0]
+            y_col = numeric_columns[1] if len(numeric_columns) > 1 else df.columns[1] if len(df.columns) > 1 else x_col
+            
+            # Columna categórica para agrupar (opcional)
+            hue_col = categorical_columns[0] if categorical_columns else None
+            
+            # Generar código de ejemplo basado en el dataset
+            if len(numeric_columns) >= 2:
+                sample_code = f"""import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+
+# Definir ruta al archivo (cambia esto si es necesario)
+file_path = r'{os.path.abspath(os.path.join(dataset_dir, csv_files[0]))}'
+
+# Verificar si el archivo existe
+if not os.path.exists(file_path):
+    # Intentar buscar en ubicaciones alternativas
+    basename = os.path.basename(file_path)
+    alt_locations = [
+        basename,  # En el directorio actual
+        os.path.join('datasets', basename),  # En subdirectorio datasets
+        os.path.join('api', 'datasets', basename),  # En api/datasets
+    ]
+    
+    for loc in alt_locations:
+        if os.path.exists(loc):
+            file_path = loc
+            print(f"Usando archivo en: {{loc}}")
+            break
+
+# Cargar el dataset
+df = pd.read_csv(file_path)
+
+# Mostrar información básica
+print("Dimensiones del dataset:", df.shape)
+print("\\nPrimeras filas del dataset:")
+print(df.head())
+
+# Estadísticas descriptivas
+print("\\nEstadísticas descriptivas:")
+print(df.describe())
+
+# Visualización
+plt.figure(figsize=(10, 6))
+sns.scatterplot(data=df, x='{x_col}', y='{y_col}'{',' + f" hue='{hue_col}'" if hue_col else ''})
+plt.title('Relación entre {x_col} y {y_col}')
+plt.tight_layout()
+plt.show()
+"""
             else:
-                corr_df = df[numeric_cols].corr()
-                
-            sns.heatmap(corr_df, annot=True, fmt='.2f', cmap='coolwarm')
-            plt.title('Matriz de Correlación')
-            filename = f"corr_{uuid.uuid4()}.png"
-            plt.savefig(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            plt.close()
-            results.append({
-                'type': 'correlation',
-                'image_url': f"/static/plots/{filename}"
-            })
+                sample_code = f"""import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Cargar el dataset
+df = pd.read_csv(r'{os.path.abspath(os.path.join(dataset_dir, csv_files[0]))}')
+
+# Mostrar información básica
+print("Dimensiones del dataset:", df.shape)
+print("\\nPrimeras filas del dataset:")
+print(df.head())
+
+# Estadísticas descriptivas
+print("\\nEstadísticas descriptivas:")
+print(df.describe())
+
+# Visualización
+plt.figure(figsize=(10, 6))
+df['{x_col}'].plot(kind='hist')
+plt.title('Distribución de {x_col}')
+plt.tight_layout()
+plt.show()
+"""
+        except Exception as e:
+            logger.error(f"Error generando código de ejemplo: {str(e)}")
+            sample_code = f"""import pandas as pd
+import matplotlib.pyplot as plt
+
+# Cargar el dataset
+df = pd.read_csv(r'{os.path.abspath(os.path.join(dataset_dir, csv_files[0]))}')
+
+# Mostrar información básica
+print("Dimensiones del dataset:", df.shape)
+print("\\nPrimeras filas del dataset:")
+print(df.head())
+
+# Estadísticas descriptivas
+print("\\nEstadísticas descriptivas:")
+print(df.describe())
+"""
         
-        # 2. Distribuciones numéricas (máximo 5 columnas)
-        for col in numeric_cols[:5]:
-            plt.figure(figsize=(8, 6))
-            sns.histplot(df[col].dropna(), kde=True)
-            plt.title(f'Distribución de {col}')
-            plt.grid(True, alpha=0.3)
-            filename = f"dist_{col}_{uuid.uuid4()}.png"
-            plt.savefig(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            plt.close()
-            results.append({
-                'type': 'distribution',
-                'column': col,
-                'image_url': f"/static/plots/{filename}"
-            })
+        # Preparar respuesta
+        result_data = {
+            'dataset_name': dataset_ref.split('/')[-1] if '/' in dataset_ref else dataset_ref,
+            'file_name': csv_files[0],
+            'rows': num_rows,
+            'columns': num_cols,
+            'column_names': df.columns.tolist(),
+            'preview': df.head(5).to_dict('records'),
+            'code': sample_code
+        }
         
-        # 3. Gráficos de barras para columnas categóricas
-        categorical_cols = df.select_dtypes(include=['object']).columns
-        for col in categorical_cols[:3]:  # Limitamos a 3 columnas categóricas
-            if df[col].nunique() <= 20:  # Solo si hay 20 o menos categorías
-                plt.figure(figsize=(10, 6))
-                value_counts = df[col].value_counts().nlargest(15)
-                sns.barplot(x=value_counts.index, y=value_counts.values)
-                plt.title(f'Frecuencia de {col}')
-                plt.xticks(rotation=45, ha='right')
-                plt.tight_layout()
-                filename = f"cat_{col}_{uuid.uuid4()}.png"
-                plt.savefig(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                plt.close()
-                results.append({
-                    'type': 'categorical',
-                    'column': col,
-                    'image_url': f"/static/plots/{filename}"
-                })
-        
-        return jsonify({
-            'success': True,
-            'dataset_info': {
-                'rows': len(df),
-                'columns': len(df.columns),
-                'columns_info': {
-                    'numeric': numeric_cols.tolist(),
-                    'categorical': categorical_cols.tolist()
-                },
-                'null_counts': df.isnull().sum().to_dict(),
-                'file_name': os.path.basename(csv_files[0])
-            },
-            'visualizations': results
-        })
-        
+        return jsonify({'success': True, 'data': result_data})
+    
     except Exception as e:
-        logger.error(f"❌ Error analizando dataset: {str(e)}")
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
+        logger.error(f"Error al analizar dataset: {str(e)}")
+        return jsonify({'error': f'Error al analizar dataset: {str(e)}'}), 500
 
 @app.route('/api/kaggle/download', methods=['POST'])
 def download_kaggle_dataset():
