@@ -39,9 +39,9 @@ jobs:
       - name: 📂 Verificar carpeta de build
         run: |
           echo "Contenido de /:"  # Cambiado de build/ a dist/
-          ls -la dist/
-          if [ ! -d "dist" ]; then    # Cambiado de build a dist
-            echo "⚠️ No se encontró el directorio dist"
+          ls -la build/
+          if [ ! -d "build" ]; then    # Cambiado de build a dist
+            echo "⚠️ No se encontró el directorio build"
             exit 1
           fi
 

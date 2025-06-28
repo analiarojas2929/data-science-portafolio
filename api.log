@@ -331,3 +331,331 @@
 2025-06-27 11:32:08,039 - INFO - 127.0.0.1 - - [27/Jun/2025 11:32:08] "OPTIONS /api/code/run HTTP/1.1" 200 -
 2025-06-27 11:32:22,731 - INFO - 127.0.0.1 - - [27/Jun/2025 11:32:22] "POST /api/code/run HTTP/1.1" 200 -
 2025-06-27 11:32:28,053 - INFO - 127.0.0.1 - - [27/Jun/2025 11:32:28] "GET /static/plots/3b2d86b3-d01c-4785-9319-dacd31c46eda.png HTTP/1.1" 200 -
+2025-06-27 11:35:38,775 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static
+2025-06-27 11:35:38,775 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 11:35:38,775 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\datasets
+2025-06-27 11:35:38,775 - INFO - Directorio creado/verificado: C:\Users\anali/.kaggle
+2025-06-27 11:35:38,775 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 11:35:38,802 - INFO -  * Restarting with stat
+2025-06-27 11:35:40,675 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static
+2025-06-27 11:35:40,675 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 11:35:40,675 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\datasets
+2025-06-27 11:35:40,675 - INFO - Directorio creado/verificado: C:\Users\anali/.kaggle
+2025-06-27 11:35:40,675 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 11:35:40,701 - WARNING -  * Debugger is active!
+2025-06-27 11:35:40,703 - INFO -  * Debugger PIN: 162-099-548
+2025-06-27 11:35:41,050 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-27 11:36:02,410 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:02] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:36:02,413 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:02] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:36:02,668 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:02] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:36:02,716 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:02] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:36:07,198 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:07] "OPTIONS /api/kaggle/search?keyword=futbol HTTP/1.1" 200 -
+2025-06-27 11:36:07,528 - INFO - 🔍 Nueva búsqueda recibida: 'futbol'
+2025-06-27 11:36:07,529 - INFO - 🔄 Término de búsqueda traducido: 'soccer'
+2025-06-27 11:36:07,532 - INFO - 🔍 Buscando datasets con keyword: soccer
+2025-06-27 11:36:07,917 - INFO - ✅ Se encontraron 8 datasets
+2025-06-27 11:36:07,919 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:07] "GET /api/kaggle/search?keyword=futbol HTTP/1.1" 200 -
+2025-06-27 11:36:09,601 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:09] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:36:09,924 - INFO - Analizando dataset: tadhgfitzgerald/fifa-international-soccer-mens-ranking-1993now
+2025-06-27 11:36:09,928 - INFO - Descargando dataset: tadhgfitzgerald/fifa-international-soccer-mens-ranking-1993now
+2025-06-27 11:36:11,293 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:11] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:36:20,192 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-27 11:36:20,602 - INFO -  * Restarting with stat
+2025-06-27 11:36:23,036 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static
+2025-06-27 11:36:23,036 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 11:36:23,037 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\datasets
+2025-06-27 11:36:23,037 - INFO - Directorio creado/verificado: C:\Users\anali/.kaggle
+2025-06-27 11:36:23,039 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 11:36:23,056 - WARNING -  * Debugger is active!
+2025-06-27 11:36:23,059 - INFO -  * Debugger PIN: 162-099-548
+2025-06-27 11:36:23,447 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-27 11:36:23,656 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:23] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:36:23,657 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:23] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:36:23,919 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:23] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:36:23,966 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:23] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:36:27,377 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:27] "OPTIONS /api/kaggle/search?keyword=futbol HTTP/1.1" 200 -
+2025-06-27 11:36:27,690 - INFO - 🔍 Nueva búsqueda recibida: 'futbol'
+2025-06-27 11:36:27,690 - INFO - 🔄 Término de búsqueda traducido: 'soccer'
+2025-06-27 11:36:27,692 - INFO - 🔍 Buscando datasets con keyword: soccer
+2025-06-27 11:36:28,124 - INFO - ✅ Se encontraron 5 datasets
+2025-06-27 11:36:28,127 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:28] "GET /api/kaggle/search?keyword=futbol HTTP/1.1" 200 -
+2025-06-27 11:36:29,615 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:29] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:36:29,939 - INFO - Analizando dataset: oles04/bundesliga-soccer-player
+2025-06-27 11:36:29,942 - INFO - Descargando dataset: oles04/bundesliga-soccer-player
+2025-06-27 11:36:30,698 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:30] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:36:41,845 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:41] "OPTIONS /api/kaggle/search?keyword=clima HTTP/1.1" 200 -
+2025-06-27 11:36:42,163 - INFO - 🔍 Nueva búsqueda recibida: 'clima'
+2025-06-27 11:36:42,163 - INFO - 🔄 Término de búsqueda traducido: 'clima'
+2025-06-27 11:36:42,164 - INFO - 🔍 Buscando datasets con keyword: clima
+2025-06-27 11:36:42,552 - INFO - ✅ Se encontraron 5 datasets
+2025-06-27 11:36:42,553 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:42] "GET /api/kaggle/search?keyword=clima HTTP/1.1" 200 -
+2025-06-27 11:36:46,768 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:46] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:36:47,075 - INFO - Analizando dataset: tarunrm09/climate-change-indicators
+2025-06-27 11:36:47,079 - INFO - Descargando dataset: tarunrm09/climate-change-indicators
+2025-06-27 11:36:47,781 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:47] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:36:53,416 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-27 11:36:53,822 - INFO -  * Restarting with stat
+2025-06-27 11:36:55,923 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static
+2025-06-27 11:36:55,923 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 11:36:55,924 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\api/datasets
+2025-06-27 11:36:55,925 - INFO - Directorio creado/verificado: C:\Users\anali/.kaggle
+2025-06-27 11:36:55,926 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 11:36:55,940 - WARNING -  * Debugger is active!
+2025-06-27 11:36:55,944 - INFO -  * Debugger PIN: 162-099-548
+2025-06-27 11:36:56,241 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-27 11:36:59,224 - INFO - 127.0.0.1 - - [27/Jun/2025 11:36:59] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:36:59,483 - INFO - Analizando dataset: tarunrm09/climate-change-indicators
+2025-06-27 11:36:59,485 - INFO - Descargando dataset: tarunrm09/climate-change-indicators
+2025-06-27 11:37:00,436 - INFO - 127.0.0.1 - - [27/Jun/2025 11:37:00] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:37:33,528 - INFO - 127.0.0.1 - - [27/Jun/2025 11:37:33] "OPTIONS /api/kaggle/search?keyword=nomade HTTP/1.1" 200 -
+2025-06-27 11:37:33,847 - INFO - 🔍 Nueva búsqueda recibida: 'nomade'
+2025-06-27 11:37:33,848 - INFO - 🔄 Término de búsqueda traducido: 'nomade'
+2025-06-27 11:37:33,849 - INFO - 🔍 Buscando datasets con keyword: nomade
+2025-06-27 11:37:34,112 - INFO - ❌ No se encontraron datasets
+2025-06-27 11:37:34,114 - WARNING - ❌ No se encontraron resultados para: nomade
+2025-06-27 11:37:34,116 - INFO - 127.0.0.1 - - [27/Jun/2025 11:37:34] "GET /api/kaggle/search?keyword=nomade HTTP/1.1" 200 -
+2025-06-27 11:37:38,679 - INFO - 127.0.0.1 - - [27/Jun/2025 11:37:38] "OPTIONS /api/kaggle/search?keyword=soccer HTTP/1.1" 200 -
+2025-06-27 11:37:38,947 - INFO - 🔍 Nueva búsqueda recibida: 'soccer'
+2025-06-27 11:37:38,947 - INFO - 🔄 Término de búsqueda traducido: 'soccer'
+2025-06-27 11:37:38,949 - INFO - 🔍 Buscando datasets con keyword: soccer
+2025-06-27 11:37:39,270 - INFO - ✅ Se encontraron 5 datasets
+2025-06-27 11:37:39,271 - INFO - 127.0.0.1 - - [27/Jun/2025 11:37:39] "GET /api/kaggle/search?keyword=soccer HTTP/1.1" 200 -
+2025-06-27 11:37:40,669 - INFO - 127.0.0.1 - - [27/Jun/2025 11:37:40] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:37:40,979 - INFO - Analizando dataset: oles04/bundesliga-soccer-player
+2025-06-27 11:37:40,981 - INFO - Descargando dataset: oles04/bundesliga-soccer-player
+2025-06-27 11:37:41,686 - INFO - 127.0.0.1 - - [27/Jun/2025 11:37:41] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:37:42,847 - INFO - Analizando dataset: ricardomattos05/jogos-do-campeonato-brasileiro
+2025-06-27 11:37:42,851 - INFO - Descargando dataset: ricardomattos05/jogos-do-campeonato-brasileiro
+2025-06-27 11:37:44,624 - INFO - 127.0.0.1 - - [27/Jun/2025 11:37:44] "[31m[1mPOST /api/kaggle/analyze HTTP/1.1[0m" 400 -
+2025-06-27 11:38:01,907 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-27 11:38:02,181 - INFO -  * Restarting with stat
+2025-06-27 11:38:04,476 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static
+2025-06-27 11:38:04,476 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 11:38:04,476 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\datasets
+2025-06-27 11:38:04,476 - INFO - Directorio creado/verificado: C:\Users\anali/.kaggle
+2025-06-27 11:38:04,476 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 11:38:04,491 - WARNING -  * Debugger is active!
+2025-06-27 11:38:04,492 - INFO -  * Debugger PIN: 162-099-548
+2025-06-27 11:38:04,832 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-27 11:39:27,080 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-27 11:39:27,315 - INFO -  * Restarting with stat
+2025-06-27 11:39:29,474 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static
+2025-06-27 11:39:29,474 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 11:39:29,474 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\datasets
+2025-06-27 11:39:29,474 - INFO - Directorio creado/verificado: C:\Users\anali/.kaggle
+2025-06-27 11:39:29,474 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 11:39:29,496 - WARNING -  * Debugger is active!
+2025-06-27 11:39:29,499 - INFO -  * Debugger PIN: 162-099-548
+2025-06-27 11:39:29,828 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-27 11:39:32,607 - INFO - 127.0.0.1 - - [27/Jun/2025 11:39:32] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:39:32,609 - INFO - 127.0.0.1 - - [27/Jun/2025 11:39:32] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:39:32,859 - INFO - 127.0.0.1 - - [27/Jun/2025 11:39:32] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:39:32,915 - INFO - 127.0.0.1 - - [27/Jun/2025 11:39:32] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:39:37,453 - INFO - 127.0.0.1 - - [27/Jun/2025 11:39:37] "OPTIONS /api/kaggle/search?keyword=futbol HTTP/1.1" 200 -
+2025-06-27 11:39:37,769 - INFO - 🔍 Nueva búsqueda recibida: 'futbol'
+2025-06-27 11:39:37,770 - INFO - 🔄 Término de búsqueda traducido: 'soccer'
+2025-06-27 11:39:37,771 - INFO - 🔍 Buscando datasets con keyword: soccer
+2025-06-27 11:39:38,114 - INFO - ✅ Se encontraron 5 datasets
+2025-06-27 11:39:38,116 - INFO - 127.0.0.1 - - [27/Jun/2025 11:39:38] "GET /api/kaggle/search?keyword=futbol HTTP/1.1" 200 -
+2025-06-27 11:39:43,377 - INFO - 127.0.0.1 - - [27/Jun/2025 11:39:43] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:39:43,687 - INFO - Analizando dataset: oles04/bundesliga-soccer-player
+2025-06-27 11:39:43,688 - INFO - Descargando dataset: oles04/bundesliga-soccer-player
+2025-06-27 11:39:44,258 - INFO - 127.0.0.1 - - [27/Jun/2025 11:39:44] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:40:00,502 - INFO - 127.0.0.1 - - [27/Jun/2025 11:40:00] "[31m[1mGET /api/sample-code?dataset=wine HTTP/1.1[0m" 405 -
+2025-06-27 11:40:01,797 - INFO - 127.0.0.1 - - [27/Jun/2025 11:40:01] "OPTIONS /api/code/run HTTP/1.1" 200 -
+2025-06-27 11:40:02,142 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-27 11:40:02,163 - INFO - Using categorical units to plot a list of strings that are all parsable as floats or dates. If these strings should be plotted as numbers, cast to the appropriate data type before plotting.
+2025-06-27 11:40:03,261 - INFO - 127.0.0.1 - - [27/Jun/2025 11:40:03] "POST /api/code/run HTTP/1.1" 200 -
+2025-06-27 11:40:05,093 - INFO - 127.0.0.1 - - [27/Jun/2025 11:40:05] "GET /static/plots/4d953332-995f-465a-a5d2-6548e953d219.png HTTP/1.1" 200 -
+2025-06-27 11:49:24,319 - INFO - 127.0.0.1 - - [27/Jun/2025 11:49:24] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:49:24,323 - INFO - 127.0.0.1 - - [27/Jun/2025 11:49:24] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:49:24,554 - INFO - 127.0.0.1 - - [27/Jun/2025 11:49:24] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:49:24,634 - INFO - 127.0.0.1 - - [27/Jun/2025 11:49:24] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:50:46,343 - INFO - 127.0.0.1 - - [27/Jun/2025 11:50:46] "OPTIONS /api/kaggle/search?keyword=futbol HTTP/1.1" 200 -
+2025-06-27 11:50:46,591 - INFO - 🔍 Nueva búsqueda recibida: 'futbol'
+2025-06-27 11:50:46,592 - INFO - 🔄 Término de búsqueda traducido: 'soccer'
+2025-06-27 11:50:46,631 - INFO - 🔍 Buscando datasets con keyword: soccer
+2025-06-27 11:50:47,058 - INFO - ✅ Se encontraron 5 datasets
+2025-06-27 11:50:47,062 - INFO - 127.0.0.1 - - [27/Jun/2025 11:50:47] "GET /api/kaggle/search?keyword=futbol HTTP/1.1" 200 -
+2025-06-27 11:51:03,691 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:03] "OPTIONS /api/kaggle/search?keyword=clima HTTP/1.1" 200 -
+2025-06-27 11:51:04,002 - INFO - 🔍 Nueva búsqueda recibida: 'clima'
+2025-06-27 11:51:04,002 - INFO - 🔄 Término de búsqueda traducido: 'clima'
+2025-06-27 11:51:04,003 - INFO - 🔍 Buscando datasets con keyword: clima
+2025-06-27 11:51:04,457 - INFO - ✅ Se encontraron 5 datasets
+2025-06-27 11:51:04,457 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:04] "GET /api/kaggle/search?keyword=clima HTTP/1.1" 200 -
+2025-06-27 11:51:06,868 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:06] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:51:07,182 - INFO - Analizando dataset: goyaladi/climate-insights-dataset
+2025-06-27 11:51:07,183 - INFO - Descargando dataset: goyaladi/climate-insights-dataset
+2025-06-27 11:51:08,685 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:08] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:51:17,140 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:17] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:51:17,454 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:17] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:51:17,456 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:17] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:51:17,779 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:17] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:51:23,297 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:23] "OPTIONS /api/kaggle/search?keyword=clima HTTP/1.1" 200 -
+2025-06-27 11:51:23,546 - INFO - 🔍 Nueva búsqueda recibida: 'clima'
+2025-06-27 11:51:23,551 - INFO - 🔄 Término de búsqueda traducido: 'clima'
+2025-06-27 11:51:23,552 - INFO - 🔍 Buscando datasets con keyword: clima
+2025-06-27 11:51:23,936 - INFO - ✅ Se encontraron 5 datasets
+2025-06-27 11:51:23,940 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:23] "GET /api/kaggle/search?keyword=clima HTTP/1.1" 200 -
+2025-06-27 11:51:26,351 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:26] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:51:26,662 - INFO - Analizando dataset: tarunrm09/climate-change-indicators
+2025-06-27 11:51:26,665 - INFO - Descargando dataset: tarunrm09/climate-change-indicators
+2025-06-27 11:51:27,376 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:27] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:51:31,996 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:31] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:51:32,310 - INFO - Analizando dataset: goyaladi/climate-insights-dataset
+2025-06-27 11:51:32,380 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:32] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:51:39,816 - INFO - 127.0.0.1 - - [27/Jun/2025 11:51:39] "OPTIONS /api/code/run HTTP/1.1" 200 -
+2025-06-27 11:53:21,579 - INFO - 127.0.0.1 - - [27/Jun/2025 11:53:21] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:53:21,581 - INFO - 127.0.0.1 - - [27/Jun/2025 11:53:21] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:53:21,828 - INFO - 127.0.0.1 - - [27/Jun/2025 11:53:21] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:53:21,887 - INFO - 127.0.0.1 - - [27/Jun/2025 11:53:21] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:53:25,408 - INFO - 127.0.0.1 - - [27/Jun/2025 11:53:25] "OPTIONS /api/code/run HTTP/1.1" 200 -
+2025-06-27 11:54:20,227 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-27 11:54:23,751 - INFO -  * Restarting with stat
+2025-06-27 11:54:26,845 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static
+2025-06-27 11:54:26,845 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 11:54:26,846 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\datasets
+2025-06-27 11:54:26,846 - INFO - Directorio creado/verificado: C:\Users\anali/.kaggle
+2025-06-27 11:54:26,848 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 11:54:26,864 - WARNING -  * Debugger is active!
+2025-06-27 11:54:26,878 - INFO -  * Debugger PIN: 162-099-548
+2025-06-27 11:54:27,249 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-27 11:55:02,100 - INFO - 127.0.0.1 - - [27/Jun/2025 11:55:02] "OPTIONS /api/code/run HTTP/1.1" 200 -
+2025-06-27 11:55:08,041 - INFO - 127.0.0.1 - - [27/Jun/2025 11:55:08] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:55:09,086 - INFO - 127.0.0.1 - - [27/Jun/2025 11:55:09] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:55:28,799 - INFO - 127.0.0.1 - - [27/Jun/2025 11:55:28] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:55:28,801 - INFO - 127.0.0.1 - - [27/Jun/2025 11:55:28] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:55:29,046 - INFO - 127.0.0.1 - - [27/Jun/2025 11:55:29] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:55:29,110 - INFO - 127.0.0.1 - - [27/Jun/2025 11:55:29] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:55:32,930 - INFO - 127.0.0.1 - - [27/Jun/2025 11:55:32] "OPTIONS /api/code/run HTTP/1.1" 200 -
+2025-06-27 11:57:44,084 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:44] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:57:44,089 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:44] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:57:44,390 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:44] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:57:44,390 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:44] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:57:44,708 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:44] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:57:44,714 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:44] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:57:45,027 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:45] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:57:45,027 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:45] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:57:45,338 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:45] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:57:45,652 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:45] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:57:45,962 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:45] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:57:46,270 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:46] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:57:47,030 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:47] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:57:47,033 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:47] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:57:47,347 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:47] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:57:47,351 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:47] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:57:54,000 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:54] "OPTIONS /api/kaggle/search?keyword=nose HTTP/1.1" 200 -
+2025-06-27 11:57:54,316 - INFO - 🔍 Nueva búsqueda recibida: 'nose'
+2025-06-27 11:57:54,316 - INFO - 🔄 Término de búsqueda traducido: 'nose'
+2025-06-27 11:57:54,318 - INFO - 🔍 Buscando datasets con keyword: nose
+2025-06-27 11:57:54,702 - INFO - ✅ Se encontraron 5 datasets
+2025-06-27 11:57:54,703 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:54] "GET /api/kaggle/search?keyword=nose HTTP/1.1" 200 -
+2025-06-27 11:57:57,771 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:57] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:57:58,087 - INFO - Analizando dataset: elakiricoder/gender-classification-dataset
+2025-06-27 11:57:58,088 - INFO - Descargando dataset: elakiricoder/gender-classification-dataset
+2025-06-27 11:57:58,787 - INFO - 127.0.0.1 - - [27/Jun/2025 11:57:58] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:58:01,427 - INFO - 127.0.0.1 - - [27/Jun/2025 11:58:01] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:58:01,431 - INFO - 127.0.0.1 - - [27/Jun/2025 11:58:01] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:58:01,674 - INFO - 127.0.0.1 - - [27/Jun/2025 11:58:01] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 11:58:01,750 - INFO - 127.0.0.1 - - [27/Jun/2025 11:58:01] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:58:01,754 - INFO - 127.0.0.1 - - [27/Jun/2025 11:58:01] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:58:02,062 - INFO - 127.0.0.1 - - [27/Jun/2025 11:58:02] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 11:58:07,394 - INFO - 127.0.0.1 - - [27/Jun/2025 11:58:07] "OPTIONS /api/kaggle/search?keyword=stock%20market HTTP/1.1" 200 -
+2025-06-27 11:58:07,656 - INFO - 🔍 Nueva búsqueda recibida: 'stock market'
+2025-06-27 11:58:07,657 - INFO - 🔄 Término de búsqueda traducido: 'stock market'
+2025-06-27 11:58:07,658 - INFO - 🔍 Buscando datasets con keyword: stock market
+2025-06-27 11:58:07,985 - INFO - ✅ Se encontraron 5 datasets
+2025-06-27 11:58:07,986 - INFO - 127.0.0.1 - - [27/Jun/2025 11:58:07] "GET /api/kaggle/search?keyword=stock%20market HTTP/1.1" 200 -
+2025-06-27 11:58:09,363 - INFO - 127.0.0.1 - - [27/Jun/2025 11:58:09] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:58:09,686 - INFO - Analizando dataset: jacksoncrow/stock-market-dataset
+2025-06-27 11:58:09,689 - INFO - Descargando dataset: jacksoncrow/stock-market-dataset
+2025-06-27 11:58:11,056 - INFO - Analizando dataset: jacksoncrow/stock-market-dataset
+2025-06-27 11:58:11,057 - INFO - Descargando dataset: jacksoncrow/stock-market-dataset
+2025-06-27 11:58:52,228 - ERROR - Error al analizar dataset: An unexpected error occurred: [WinError 183] No se puede crear un archivo que ya existe: 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\datasets\\jacksoncrow_stock-market-dataset\\stocks'. Please report this issue at https://www.github.com/kaggle/kaggle-api
+2025-06-27 11:58:52,363 - INFO - 127.0.0.1 - - [27/Jun/2025 11:58:52] "[35m[1mPOST /api/kaggle/analyze HTTP/1.1[0m" 500 -
+2025-06-27 11:58:56,455 - INFO - 127.0.0.1 - - [27/Jun/2025 11:58:56] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:58:56,764 - INFO - Analizando dataset: yash612/stockmarket-sentiment-dataset
+2025-06-27 11:58:56,767 - INFO - Descargando dataset: yash612/stockmarket-sentiment-dataset
+2025-06-27 11:58:58,171 - INFO - 127.0.0.1 - - [27/Jun/2025 11:58:58] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 11:59:04,718 - INFO - 127.0.0.1 - - [27/Jun/2025 11:59:04] "OPTIONS /api/code/run HTTP/1.1" 200 -
+2025-06-27 11:59:37,198 - INFO - 127.0.0.1 - - [27/Jun/2025 11:59:37] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 12:00:27,870 - INFO - 127.0.0.1 - - [27/Jun/2025 12:00:27] "OPTIONS /api/code/run HTTP/1.1" 200 -
+2025-06-27 12:01:14,070 - INFO - 127.0.0.1 - - [27/Jun/2025 12:01:14] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:01:14,401 - INFO - 127.0.0.1 - - [27/Jun/2025 12:01:14] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:01:38,047 - INFO - 127.0.0.1 - - [27/Jun/2025 12:01:38] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:01:38,358 - INFO - 127.0.0.1 - - [27/Jun/2025 12:01:38] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:02:07,109 - INFO - 127.0.0.1 - - [27/Jun/2025 12:02:07] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:02:07,111 - INFO - 127.0.0.1 - - [27/Jun/2025 12:02:07] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 12:02:07,392 - INFO - 127.0.0.1 - - [27/Jun/2025 12:02:07] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:02:07,431 - INFO - 127.0.0.1 - - [27/Jun/2025 12:02:07] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 12:02:07,444 - INFO - 127.0.0.1 - - [27/Jun/2025 12:02:07] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:02:07,712 - INFO - 127.0.0.1 - - [27/Jun/2025 12:02:07] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:04:12,291 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-27 12:04:18,579 - INFO -  * Restarting with stat
+2025-06-27 12:04:23,754 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static
+2025-06-27 12:04:23,755 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 12:04:23,755 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\datasets
+2025-06-27 12:04:23,755 - INFO - Directorio creado/verificado: C:\Users\anali/.kaggle
+2025-06-27 12:04:23,759 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 12:04:23,779 - WARNING -  * Debugger is active!
+2025-06-27 12:04:23,796 - INFO -  * Debugger PIN: 162-099-548
+2025-06-27 12:04:24,430 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2025-06-27 12:04:24,621 - INFO - 127.0.0.1 - - [27/Jun/2025 12:04:24] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 12:04:24,649 - INFO - 127.0.0.1 - - [27/Jun/2025 12:04:24] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 12:04:24,935 - INFO - 127.0.0.1 - - [27/Jun/2025 12:04:24] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:04:25,043 - INFO - 127.0.0.1 - - [27/Jun/2025 12:04:25] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:04:25,245 - INFO - 127.0.0.1 - - [27/Jun/2025 12:04:25] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:04:25,359 - INFO - 127.0.0.1 - - [27/Jun/2025 12:04:25] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:04:27,733 - INFO - 127.0.0.1 - - [27/Jun/2025 12:04:27] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:04:28,048 - INFO - 127.0.0.1 - - [27/Jun/2025 12:04:28] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:04:34,480 - INFO - 127.0.0.1 - - [27/Jun/2025 12:04:34] "OPTIONS /api/kaggle/search?keyword=movie HTTP/1.1" 200 -
+2025-06-27 12:04:34,790 - INFO - 🔍 Nueva búsqueda recibida: 'movie'
+2025-06-27 12:04:34,791 - INFO - 🔄 Término de búsqueda traducido: 'movie'
+2025-06-27 12:04:34,793 - INFO - 🔍 Buscando datasets con keyword: movie
+2025-06-27 12:04:35,313 - INFO - ✅ Se encontraron 5 datasets
+2025-06-27 12:04:35,314 - INFO - 127.0.0.1 - - [27/Jun/2025 12:04:35] "GET /api/kaggle/search?keyword=movie HTTP/1.1" 200 -
+2025-06-27 12:04:36,568 - INFO - 127.0.0.1 - - [27/Jun/2025 12:04:36] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 12:04:36,886 - INFO - Analizando dataset: tmdb/tmdb-movie-metadata
+2025-06-27 12:04:36,891 - INFO - Descargando dataset: tmdb/tmdb-movie-metadata
+2025-06-27 12:04:39,991 - INFO - 127.0.0.1 - - [27/Jun/2025 12:04:39] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 12:07:30,029 - INFO - 127.0.0.1 - - [27/Jun/2025 12:07:30] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:07:30,120 - INFO - 127.0.0.1 - - [27/Jun/2025 12:07:30] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 12:07:30,278 - INFO - 127.0.0.1 - - [27/Jun/2025 12:07:30] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:07:30,341 - INFO - 127.0.0.1 - - [27/Jun/2025 12:07:30] "GET /api/status/kaggle HTTP/1.1" 200 -
+2025-06-27 12:07:30,425 - INFO - 127.0.0.1 - - [27/Jun/2025 12:07:30] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:07:47,735 - INFO - 127.0.0.1 - - [27/Jun/2025 12:07:47] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:07:48,052 - INFO - 127.0.0.1 - - [27/Jun/2025 12:07:48] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:08:16,043 - INFO - 127.0.0.1 - - [27/Jun/2025 12:08:16] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:08:16,306 - INFO - 127.0.0.1 - - [27/Jun/2025 12:08:16] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:08:16,350 - INFO - 127.0.0.1 - - [27/Jun/2025 12:08:16] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:08:16,610 - INFO - 127.0.0.1 - - [27/Jun/2025 12:08:16] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:08:47,240 - INFO - 127.0.0.1 - - [27/Jun/2025 12:08:47] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:08:47,492 - INFO - 127.0.0.1 - - [27/Jun/2025 12:08:47] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:08:47,553 - INFO - 127.0.0.1 - - [27/Jun/2025 12:08:47] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:08:47,800 - INFO - 127.0.0.1 - - [27/Jun/2025 12:08:47] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:09:20,081 - INFO - 127.0.0.1 - - [27/Jun/2025 12:09:20] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:09:20,327 - INFO - 127.0.0.1 - - [27/Jun/2025 12:09:20] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:09:20,387 - INFO - 127.0.0.1 - - [27/Jun/2025 12:09:20] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:09:20,639 - INFO - 127.0.0.1 - - [27/Jun/2025 12:09:20] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:10:12,037 - INFO - 127.0.0.1 - - [27/Jun/2025 12:10:12] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:10:12,291 - INFO - 127.0.0.1 - - [27/Jun/2025 12:10:12] "GET /api/datasets HTTP/1.1" 200 -
+2025-06-27 12:12:56,855 - INFO - 127.0.0.1 - - [27/Jun/2025 12:12:56] "OPTIONS /api/kaggle/search?keyword=futbol HTTP/1.1" 200 -
+2025-06-27 12:12:57,109 - INFO - 🔍 Nueva búsqueda recibida: 'futbol'
+2025-06-27 12:12:57,111 - INFO - 🔄 Término de búsqueda traducido: 'soccer'
+2025-06-27 12:12:57,148 - INFO - 🔍 Buscando datasets con keyword: soccer
+2025-06-27 12:12:57,617 - INFO - ✅ Se encontraron 5 datasets
+2025-06-27 12:12:57,618 - INFO - 127.0.0.1 - - [27/Jun/2025 12:12:57] "GET /api/kaggle/search?keyword=futbol HTTP/1.1" 200 -
+2025-06-27 12:12:58,987 - INFO - 127.0.0.1 - - [27/Jun/2025 12:12:58] "OPTIONS /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 12:12:59,327 - INFO - Analizando dataset: tadhgfitzgerald/fifa-international-soccer-mens-ranking-1993now
+2025-06-27 12:12:59,334 - INFO - Descargando dataset: tadhgfitzgerald/fifa-international-soccer-mens-ranking-1993now
+2025-06-27 12:13:00,835 - INFO - 127.0.0.1 - - [27/Jun/2025 12:13:00] "POST /api/kaggle/analyze HTTP/1.1" 200 -
+2025-06-27 12:13:18,887 - INFO -  * Detected change in 'C:\\Users\\anali\\OneDrive\\Documentos\\data-science-portafolio\\api\\app.py', reloading
+2025-06-27 12:13:20,705 - INFO -  * Restarting with stat
+2025-06-27 12:13:28,380 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static
+2025-06-27 12:13:28,380 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\static\plots
+2025-06-27 12:13:28,380 - INFO - Directorio creado/verificado: C:\Users\anali\OneDrive\Documentos\data-science-portafolio\api\datasets
+2025-06-27 12:13:28,380 - INFO - Directorio creado/verificado: C:\Users\anali/.kaggle
+2025-06-27 12:13:28,396 - INFO - ✅ API de Kaggle autenticada correctamente
+2025-06-27 12:13:28,416 - WARNING -  * Debugger is active!
+2025-06-27 12:13:28,428 - INFO -  * Debugger PIN: 162-099-548
+2025-06-27 12:13:30,215 - INFO -  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
