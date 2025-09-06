@@ -72,5 +72,5 @@ Si deseas contribuir a este proyecto, siéntete libre de abrir un issue o enviar
 
 Puedes contactarme a través de mis redes sociales:
 
-- [LinkedIn](https://www.linkedin.com/in/tu_perfil)
-- [GitHub](https://github.com/tu_usuario)
+- [LinkedIn](https://www.linkedin.com/in/analia-rojas-araya-056349205/)
+- [GitHub](https://github.com/analiarojas2929)
